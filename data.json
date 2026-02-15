@@ -1,0 +1,984 @@
+{
+  "lastUpdated": "2026-02-15",
+  "dataSource": "ONS RPI Time Series CZMS (MM23)",
+  "apiEndpoint": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/czms/mm23/data",
+  "national": {
+    "current": 4.83,
+    "currentDate": "2025-01",
+    "yearlyAverage": {
+      "2010": 2.94,
+      "2011": 3.08,
+      "2012": 3.18,
+      "2013": 3.29,
+      "2014": 3.37,
+      "2015": 3.45,
+      "2016": 3.48,
+      "2017": 3.58,
+      "2018": 3.64,
+      "2019": 3.7,
+      "2020": 3.78,
+      "2021": 3.9,
+      "2022": 4.1,
+      "2023": 4.56,
+      "2024": 4.77,
+      "2025": 4.83
+    },
+    "monthly": [
+      {
+        "date": "2010-01",
+        "price": 2.84
+      },
+      {
+        "date": "2010-02",
+        "price": 2.89
+      },
+      {
+        "date": "2010-03",
+        "price": 2.91
+      },
+      {
+        "date": "2010-04",
+        "price": 2.94
+      },
+      {
+        "date": "2010-05",
+        "price": 2.95
+      },
+      {
+        "date": "2010-06",
+        "price": 2.95
+      },
+      {
+        "date": "2010-07",
+        "price": 2.96
+      },
+      {
+        "date": "2010-08",
+        "price": 2.96
+      },
+      {
+        "date": "2010-09",
+        "price": 2.96
+      },
+      {
+        "date": "2010-10",
+        "price": 2.97
+      },
+      {
+        "date": "2010-11",
+        "price": 2.98
+      },
+      {
+        "date": "2010-12",
+        "price": 2.99
+      },
+      {
+        "date": "2011-01",
+        "price": 3.04
+      },
+      {
+        "date": "2011-02",
+        "price": 3.01
+      },
+      {
+        "date": "2011-03",
+        "price": 3.02
+      },
+      {
+        "date": "2011-04",
+        "price": 3.07
+      },
+      {
+        "date": "2011-05",
+        "price": 3.08
+      },
+      {
+        "date": "2011-06",
+        "price": 3.08
+      },
+      {
+        "date": "2011-07",
+        "price": 3.09
+      },
+      {
+        "date": "2011-08",
+        "price": 3.1
+      },
+      {
+        "date": "2011-09",
+        "price": 3.11
+      },
+      {
+        "date": "2011-10",
+        "price": 3.1
+      },
+      {
+        "date": "2011-11",
+        "price": 3.11
+      },
+      {
+        "date": "2011-12",
+        "price": 3.12
+      },
+      {
+        "date": "2012-01",
+        "price": 3.12
+      },
+      {
+        "date": "2012-02",
+        "price": 3.12
+      },
+      {
+        "date": "2012-03",
+        "price": 3.14
+      },
+      {
+        "date": "2012-04",
+        "price": 3.18
+      },
+      {
+        "date": "2012-05",
+        "price": 3.19
+      },
+      {
+        "date": "2012-06",
+        "price": 3.19
+      },
+      {
+        "date": "2012-07",
+        "price": 3.2
+      },
+      {
+        "date": "2012-08",
+        "price": 3.2
+      },
+      {
+        "date": "2012-09",
+        "price": 3.2
+      },
+      {
+        "date": "2012-10",
+        "price": 3.2
+      },
+      {
+        "date": "2012-11",
+        "price": 3.21
+      },
+      {
+        "date": "2012-12",
+        "price": 3.22
+      },
+      {
+        "date": "2013-01",
+        "price": 3.22
+      },
+      {
+        "date": "2013-02",
+        "price": 3.26
+      },
+      {
+        "date": "2013-03",
+        "price": 3.26
+      },
+      {
+        "date": "2013-04",
+        "price": 3.29
+      },
+      {
+        "date": "2013-05",
+        "price": 3.29
+      },
+      {
+        "date": "2013-06",
+        "price": 3.3
+      },
+      {
+        "date": "2013-07",
+        "price": 3.3
+      },
+      {
+        "date": "2013-08",
+        "price": 3.3
+      },
+      {
+        "date": "2013-09",
+        "price": 3.31
+      },
+      {
+        "date": "2013-10",
+        "price": 3.31
+      },
+      {
+        "date": "2013-11",
+        "price": 3.31
+      },
+      {
+        "date": "2013-12",
+        "price": 3.32
+      },
+      {
+        "date": "2014-01",
+        "price": 3.32
+      },
+      {
+        "date": "2014-02",
+        "price": 3.34
+      },
+      {
+        "date": "2014-03",
+        "price": 3.35
+      },
+      {
+        "date": "2014-04",
+        "price": 3.36
+      },
+      {
+        "date": "2014-05",
+        "price": 3.37
+      },
+      {
+        "date": "2014-06",
+        "price": 3.37
+      },
+      {
+        "date": "2014-07",
+        "price": 3.37
+      },
+      {
+        "date": "2014-08",
+        "price": 3.37
+      },
+      {
+        "date": "2014-09",
+        "price": 3.38
+      },
+      {
+        "date": "2014-10",
+        "price": 3.39
+      },
+      {
+        "date": "2014-11",
+        "price": 3.4
+      },
+      {
+        "date": "2014-12",
+        "price": 3.4
+      },
+      {
+        "date": "2015-01",
+        "price": 3.4
+      },
+      {
+        "date": "2015-02",
+        "price": 3.43
+      },
+      {
+        "date": "2015-03",
+        "price": 3.44
+      },
+      {
+        "date": "2015-04",
+        "price": 3.44
+      },
+      {
+        "date": "2015-05",
+        "price": 3.44
+      },
+      {
+        "date": "2015-06",
+        "price": 3.45
+      },
+      {
+        "date": "2015-07",
+        "price": 3.45
+      },
+      {
+        "date": "2015-08",
+        "price": 3.45
+      },
+      {
+        "date": "2015-09",
+        "price": 3.46
+      },
+      {
+        "date": "2015-10",
+        "price": 3.46
+      },
+      {
+        "date": "2015-11",
+        "price": 3.47
+      },
+      {
+        "date": "2015-12",
+        "price": 3.48
+      },
+      {
+        "date": "2016-01",
+        "price": 3.48
+      },
+      {
+        "date": "2016-02",
+        "price": 3.44
+      },
+      {
+        "date": "2016-03",
+        "price": 3.46
+      },
+      {
+        "date": "2016-04",
+        "price": 3.47
+      },
+      {
+        "date": "2016-05",
+        "price": 3.48
+      },
+      {
+        "date": "2016-06",
+        "price": 3.48
+      },
+      {
+        "date": "2016-07",
+        "price": 3.48
+      },
+      {
+        "date": "2016-08",
+        "price": 3.49
+      },
+      {
+        "date": "2016-09",
+        "price": 3.5
+      },
+      {
+        "date": "2016-10",
+        "price": 3.51
+      },
+      {
+        "date": "2016-11",
+        "price": 3.51
+      },
+      {
+        "date": "2016-12",
+        "price": 3.52
+      },
+      {
+        "date": "2017-01",
+        "price": 3.52
+      },
+      {
+        "date": "2017-02",
+        "price": 3.52
+      },
+      {
+        "date": "2017-03",
+        "price": 3.55
+      },
+      {
+        "date": "2017-04",
+        "price": 3.57
+      },
+      {
+        "date": "2017-05",
+        "price": 3.58
+      },
+      {
+        "date": "2017-06",
+        "price": 3.59
+      },
+      {
+        "date": "2017-07",
+        "price": 3.59
+      },
+      {
+        "date": "2017-08",
+        "price": 3.59
+      },
+      {
+        "date": "2017-09",
+        "price": 3.6
+      },
+      {
+        "date": "2017-10",
+        "price": 3.61
+      },
+      {
+        "date": "2017-11",
+        "price": 3.62
+      },
+      {
+        "date": "2017-12",
+        "price": 3.63
+      },
+      {
+        "date": "2018-01",
+        "price": 3.63
+      },
+      {
+        "date": "2018-02",
+        "price": 3.61
+      },
+      {
+        "date": "2018-03",
+        "price": 3.61
+      },
+      {
+        "date": "2018-04",
+        "price": 3.63
+      },
+      {
+        "date": "2018-05",
+        "price": 3.64
+      },
+      {
+        "date": "2018-06",
+        "price": 3.65
+      },
+      {
+        "date": "2018-07",
+        "price": 3.65
+      },
+      {
+        "date": "2018-08",
+        "price": 3.65
+      },
+      {
+        "date": "2018-09",
+        "price": 3.66
+      },
+      {
+        "date": "2018-10",
+        "price": 3.66
+      },
+      {
+        "date": "2018-11",
+        "price": 3.67
+      },
+      {
+        "date": "2018-12",
+        "price": 3.67
+      },
+      {
+        "date": "2019-01",
+        "price": 3.67
+      },
+      {
+        "date": "2019-02",
+        "price": 3.66
+      },
+      {
+        "date": "2019-03",
+        "price": 3.67
+      },
+      {
+        "date": "2019-04",
+        "price": 3.69
+      },
+      {
+        "date": "2019-05",
+        "price": 3.69
+      },
+      {
+        "date": "2019-06",
+        "price": 3.7
+      },
+      {
+        "date": "2019-07",
+        "price": 3.7
+      },
+      {
+        "date": "2019-08",
+        "price": 3.71
+      },
+      {
+        "date": "2019-09",
+        "price": 3.72
+      },
+      {
+        "date": "2019-10",
+        "price": 3.72
+      },
+      {
+        "date": "2019-11",
+        "price": 3.73
+      },
+      {
+        "date": "2019-12",
+        "price": 3.73
+      },
+      {
+        "date": "2020-01",
+        "price": 3.73
+      },
+      {
+        "date": "2020-02",
+        "price": 3.76
+      },
+      {
+        "date": "2020-03",
+        "price": 3.75
+      },
+      {
+        "date": "2020-07",
+        "price": 3.79
+      },
+      {
+        "date": "2020-08",
+        "price": 3.8
+      },
+      {
+        "date": "2020-09",
+        "price": 3.8
+      },
+      {
+        "date": "2020-10",
+        "price": 3.8
+      },
+      {
+        "date": "2020-12",
+        "price": 3.79
+      },
+      {
+        "date": "2021-05",
+        "price": 3.87
+      },
+      {
+        "date": "2021-06",
+        "price": 3.87
+      },
+      {
+        "date": "2021-07",
+        "price": 3.88
+      },
+      {
+        "date": "2021-08",
+        "price": 3.88
+      },
+      {
+        "date": "2021-09",
+        "price": 3.88
+      },
+      {
+        "date": "2021-10",
+        "price": 3.92
+      },
+      {
+        "date": "2021-11",
+        "price": 3.94
+      },
+      {
+        "date": "2021-12",
+        "price": 3.96
+      },
+      {
+        "date": "2022-01",
+        "price": 3.96
+      },
+      {
+        "date": "2022-02",
+        "price": 3.98
+      },
+      {
+        "date": "2022-03",
+        "price": 4.02
+      },
+      {
+        "date": "2022-04",
+        "price": 4.08
+      },
+      {
+        "date": "2022-05",
+        "price": 4.09
+      },
+      {
+        "date": "2022-06",
+        "price": 4.09
+      },
+      {
+        "date": "2022-07",
+        "price": 4.09
+      },
+      {
+        "date": "2022-08",
+        "price": 4.12
+      },
+      {
+        "date": "2022-09",
+        "price": 4.13
+      },
+      {
+        "date": "2022-10",
+        "price": 4.15
+      },
+      {
+        "date": "2022-11",
+        "price": 4.2
+      },
+      {
+        "date": "2022-12",
+        "price": 4.24
+      },
+      {
+        "date": "2023-01",
+        "price": 4.23
+      },
+      {
+        "date": "2023-02",
+        "price": 4.45
+      },
+      {
+        "date": "2023-03",
+        "price": 4.5
+      },
+      {
+        "date": "2023-04",
+        "price": 4.54
+      },
+      {
+        "date": "2023-05",
+        "price": 4.56
+      },
+      {
+        "date": "2023-06",
+        "price": 4.57
+      },
+      {
+        "date": "2023-07",
+        "price": 4.58
+      },
+      {
+        "date": "2023-08",
+        "price": 4.62
+      },
+      {
+        "date": "2023-09",
+        "price": 4.62
+      },
+      {
+        "date": "2023-10",
+        "price": 4.67
+      },
+      {
+        "date": "2023-11",
+        "price": 4.69
+      },
+      {
+        "date": "2023-12",
+        "price": 4.7
+      },
+      {
+        "date": "2024-01",
+        "price": 4.69
+      },
+      {
+        "date": "2024-02",
+        "price": 4.7
+      },
+      {
+        "date": "2024-03",
+        "price": 4.71
+      },
+      {
+        "date": "2024-04",
+        "price": 4.75
+      },
+      {
+        "date": "2024-05",
+        "price": 4.77
+      },
+      {
+        "date": "2024-06",
+        "price": 4.78
+      },
+      {
+        "date": "2024-07",
+        "price": 4.79
+      },
+      {
+        "date": "2024-08",
+        "price": 4.8
+      },
+      {
+        "date": "2024-09",
+        "price": 4.79
+      },
+      {
+        "date": "2024-10",
+        "price": 4.8
+      },
+      {
+        "date": "2024-11",
+        "price": 4.81
+      },
+      {
+        "date": "2024-12",
+        "price": 4.82
+      },
+      {
+        "date": "2025-01",
+        "price": 4.83
+      }
+    ],
+    "industryAverage": {
+      "current": 5.17,
+      "source": "Morning Advertiser Pint Price Survey, May 2025",
+      "note": "Industry surveys include all draught products, not just lager"
+    }
+  },
+  "regional": {
+    "source": "Morning Advertiser Pint Price Survey 2025",
+    "areas": [
+      {
+        "name": "London",
+        "price": 6.1,
+        "verified": true
+      },
+      {
+        "name": "South East",
+        "price": 4.94,
+        "verified": true
+      },
+      {
+        "name": "South West",
+        "price": 4.93,
+        "verified": true
+      },
+      {
+        "name": "Scotland",
+        "price": 4.8,
+        "verified": false
+      },
+      {
+        "name": "North West",
+        "price": 4.8,
+        "verified": false
+      },
+      {
+        "name": "Wales",
+        "price": 4.74,
+        "verified": true
+      },
+      {
+        "name": "Midlands",
+        "price": 4.68,
+        "verified": true
+      },
+      {
+        "name": "North East",
+        "price": 4.7,
+        "verified": false
+      },
+      {
+        "name": "Yorkshire & Humber",
+        "price": 4.65,
+        "verified": false
+      }
+    ]
+  },
+  "sheffield": {
+    "average": 4.13,
+    "averageExcBudget": 4.44,
+    "source": "CAMRA Sheffield Beer Capital Survey, May 2025",
+    "change": {
+      "amount": 0.5,
+      "percent": 13.8,
+      "since": "February 2023"
+    },
+    "cheapest": {
+      "price": 2.4,
+      "beer": "Sam Smith's XXXX Best",
+      "pub": "The Brown Bear"
+    },
+    "mostExpensive": {
+      "price": 6.5,
+      "beer": "Little Critters Big Hoppa (5.7%)",
+      "pub": "Various"
+    },
+    "pubs": [
+      {
+        "name": "Sheffield Tap",
+        "ticker": "SHT",
+        "price": 5.2,
+        "type": "Craft Bar",
+        "location": "Platform 1, Station",
+        "change": 6.1,
+        "verified": false
+      },
+      {
+        "name": "The Brown Bear",
+        "ticker": "BBR",
+        "price": 2.4,
+        "type": "Sam Smith's",
+        "location": "Norfolk St",
+        "change": -4.0,
+        "verified": true
+      },
+      {
+        "name": "Kelham Island Tavern",
+        "ticker": "KIT",
+        "price": 4.2,
+        "type": "Cask Ale",
+        "location": "Kelham Island",
+        "change": 1.2,
+        "verified": false
+      },
+      {
+        "name": "Fagans",
+        "ticker": "FAG",
+        "price": 4.2,
+        "type": "Traditional",
+        "location": "Broad Lane",
+        "change": 2.4,
+        "verified": false
+      },
+      {
+        "name": "Brothers Arms",
+        "ticker": "BRA",
+        "price": 3.3,
+        "type": "Cask Ale",
+        "location": "Heeley",
+        "change": -1.5,
+        "verified": true
+      },
+      {
+        "name": "Wetherspoons",
+        "ticker": "WTH",
+        "price": 2.97,
+        "type": "Chain",
+        "location": "Woodseats Palace",
+        "change": -2.3,
+        "verified": true
+      },
+      {
+        "name": "The Globe",
+        "ticker": "GLB",
+        "price": 2.55,
+        "type": "John Smith's",
+        "location": "Howard St",
+        "change": -3.8,
+        "verified": true
+      },
+      {
+        "name": "Sheaf House",
+        "ticker": "SFH",
+        "price": 3.2,
+        "type": "John Smith's",
+        "location": "Bramall Lane",
+        "change": -1.2,
+        "verified": true
+      },
+      {
+        "name": "Cremorne",
+        "ticker": "CRM",
+        "price": 4.2,
+        "type": "Cask Ale",
+        "location": "London Rd",
+        "change": 3.1,
+        "verified": false
+      },
+      {
+        "name": "True North",
+        "ticker": "TRN",
+        "price": 5.2,
+        "type": "Craft Brewery",
+        "location": "Eldon St",
+        "change": 4.2,
+        "verified": false
+      }
+    ]
+  },
+  "narrative": {
+    "breakdown": {
+      "source": "BBPA / Oxford Economics 2024",
+      "pintPrice": 4.83,
+      "components": [
+        {
+          "name": "Tax (Duty, VAT, Rates)",
+          "percent": 33.4,
+          "amount": 1.61,
+          "color": "red"
+        },
+        {
+          "name": "Brewery / Supplier",
+          "percent": 21.7,
+          "amount": 1.05,
+          "color": "amber"
+        },
+        {
+          "name": "Rent & Overheads",
+          "percent": 24.1,
+          "amount": 1.16,
+          "color": "blue"
+        },
+        {
+          "name": "Staff",
+          "percent": 17.8,
+          "amount": 0.86,
+          "color": "teal"
+        },
+        {
+          "name": "Pub Profit",
+          "percent": 3.0,
+          "amount": 0.12,
+          "color": "green"
+        }
+      ],
+      "profitPerPint": 0.12,
+      "profitPerPint2009": 0.84
+    },
+    "closures": {
+      "source": "BBPA pub numbers 2014-2024, CAMRA closures report Feb 2025",
+      "netClosuresDecade": 6900,
+      "closuresPerWeek": 6,
+      "pubsRemaining": 45000,
+      "pubsPeak": 51900,
+      "peakYear": 2014,
+      "declinePercent": 13
+    },
+    "inflation": {
+      "source": "ONS RPI (CZMS), GOV.UK NLW rates, ONS House Price Index",
+      "since": 2010,
+      "metrics": [
+        {
+          "name": "Minimum wage",
+          "growth": 106,
+          "from": 5.93,
+          "to": 12.21,
+          "unit": "GBP/hr"
+        },
+        {
+          "name": "House prices",
+          "growth": 74,
+          "from": 167000,
+          "to": 290000,
+          "unit": "GBP"
+        },
+        {
+          "name": "Avg pint price",
+          "growth": 73,
+          "from": 2.8,
+          "to": 4.83,
+          "unit": "GBP"
+        },
+        {
+          "name": "General inflation (CPI)",
+          "growth": 45,
+          "from": null,
+          "to": null,
+          "unit": "percent"
+        }
+      ],
+      "pintsPerHour": {
+        "2010": 2.1,
+        "2025": 2.5
+      }
+    }
+  },
+  "duty": {
+    "source": "GOV.UK Alcohol Duty Rates, Feb 2026",
+    "standardRate": 22.58,
+    "draughtRelief": 19.45,
+    "unit": "GBP per litre of pure alcohol",
+    "perPint4pct": 0.44,
+    "perPint5pct": 0.55,
+    "note": "Draught relief gives 13.9% discount for on-trade beer"
+  }
+}

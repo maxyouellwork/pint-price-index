@@ -1,0 +1,2236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <title>Pint Price Index — PPI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ==========================================
+           RESET & BASE
+        ========================================== */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a26;
+            --bg-card-hover: #22222f;
+            --bg-elevated: #242433;
+            --border: #2a2a3a;
+            --border-light: #1e1e2e;
+
+            --text-primary: #e8e8f0;
+            --text-secondary: #8888a0;
+            --text-tertiary: #55556a;
+
+            --green: #00d4a1;
+            --green-dim: rgba(0, 212, 161, 0.12);
+            --green-glow: rgba(0, 212, 161, 0.3);
+            --red: #ff4757;
+            --red-dim: rgba(255, 71, 87, 0.12);
+            --amber: #f0a030;
+            --amber-dim: rgba(240, 160, 48, 0.12);
+            --blue: #4a90ff;
+            --blue-dim: rgba(74, 144, 255, 0.12);
+            --teal: #2dd4bf;
+            --teal-dim: rgba(45, 212, 191, 0.12);
+
+            --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+            --font-sans: 'Inter', -apple-system, sans-serif;
+
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+
+            --safe-top: env(safe-area-inset-top, 0px);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
+        html {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        body {
+            background: var(--bg-primary);
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding-bottom: calc(72px + var(--safe-bottom));
+        }
+
+        /* ==========================================
+           LOADING SCREEN
+        ========================================== */
+        .loader {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-primary);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-logo {
+            font-family: var(--font-mono);
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--green);
+            letter-spacing: -1px;
+            margin-bottom: 24px;
+        }
+
+        .loader-logo span { color: var(--text-tertiary); }
+
+        .loader-bar {
+            width: 200px;
+            height: 2px;
+            background: var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .loader-bar-fill {
+            height: 100%;
+            background: var(--green);
+            border-radius: 2px;
+            animation: loadBar 1.8s ease-in-out forwards;
+            box-shadow: 0 0 12px var(--green-glow);
+        }
+
+        @keyframes loadBar {
+            0% { width: 0%; }
+            30% { width: 40%; }
+            60% { width: 70%; }
+            100% { width: 100%; }
+        }
+
+        .loader-text {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--text-tertiary);
+            margin-top: 16px;
+            letter-spacing: 1px;
+        }
+
+        /* ==========================================
+           STATUS BAR (FAKE iOS)
+        ========================================== */
+        .status-bar {
+            padding: calc(var(--safe-top) + 8px) 20px 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--font-sans);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .status-bar-time { font-variant-numeric: tabular-nums; }
+
+        .status-bar-icons {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .status-bar-icons svg { width: 16px; height: 16px; fill: var(--text-secondary); }
+
+        /* ==========================================
+           APP HEADER
+        ========================================== */
+        .app-header {
+            padding: 12px 20px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .app-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .app-logo-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .app-logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .app-logo-text {
+            font-family: var(--font-mono);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+        }
+
+        .app-logo-text span {
+            color: var(--text-tertiary);
+            font-weight: 400;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .header-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .header-btn svg { width: 18px; height: 18px; stroke: var(--text-secondary); fill: none; stroke-width: 1.8; }
+
+        .notification-dot {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 7px;
+            height: 7px;
+            background: var(--red);
+            border-radius: 50%;
+            border: 1.5px solid var(--bg-primary);
+        }
+
+        /* ==========================================
+           LIVE TICKER
+        ========================================== */
+        .ticker-wrap {
+            border-top: 1px solid var(--border-light);
+            border-bottom: 1px solid var(--border-light);
+            overflow: hidden;
+            background: var(--bg-secondary);
+            padding: 10px 0;
+        }
+
+        .ticker {
+            display: flex;
+            gap: 32px;
+            animation: tickerScroll 30s linear infinite;
+            width: max-content;
+        }
+
+        @keyframes tickerScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .ticker-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            font-family: var(--font-mono);
+            font-size: 12px;
+        }
+
+        .ticker-name {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .ticker-price {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .ticker-change {
+            font-weight: 600;
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .ticker-change.up {
+            color: var(--red);
+            background: var(--red-dim);
+        }
+
+        .ticker-change.down {
+            color: var(--green);
+            background: var(--green-dim);
+        }
+
+        /* ==========================================
+           PORTFOLIO SUMMARY
+        ========================================== */
+        .portfolio {
+            padding: 24px 20px;
+        }
+
+        .portfolio-label {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .portfolio-value {
+            font-family: var(--font-mono);
+            font-size: 42px;
+            font-weight: 700;
+            letter-spacing: -2px;
+            color: var(--text-primary);
+            line-height: 1;
+        }
+
+        .portfolio-value .currency {
+            font-size: 28px;
+            color: var(--text-tertiary);
+            font-weight: 400;
+        }
+
+        .portfolio-change {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 10px;
+            font-family: var(--font-mono);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .portfolio-change.positive { color: var(--red); }
+        .portfolio-change.negative { color: var(--green); }
+
+        .portfolio-change .label {
+            color: var(--text-tertiary);
+            font-weight: 400;
+            font-size: 12px;
+            font-family: var(--font-sans);
+        }
+
+        .portfolio-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .portfolio-stat {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 14px;
+        }
+
+        .portfolio-stat-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-tertiary);
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .portfolio-stat-value {
+            font-family: var(--font-mono);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .portfolio-stat-value.green { color: var(--green); }
+        .portfolio-stat-value.red { color: var(--red); }
+        .portfolio-stat-value.amber { color: var(--amber); }
+
+        /* ==========================================
+           CHART SECTION
+        ========================================== */
+        .chart-section {
+            padding: 0 20px 24px;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 4px;
+        }
+
+        .chart-pub-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .chart-pub-type {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            margin-top: 2px;
+        }
+
+        .chart-current {
+            text-align: right;
+        }
+
+        .chart-current-price {
+            font-family: var(--font-mono);
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .chart-current-change {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--red);
+        }
+
+        .chart-canvas {
+            width: 100%;
+            height: 200px;
+            margin: 16px 0;
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--radius-md);
+        }
+
+        .chart-canvas svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .chart-time-toggles {
+            display: flex;
+            gap: 4px;
+            background: var(--bg-card);
+            border-radius: var(--radius-sm);
+            padding: 3px;
+        }
+
+        .chart-time-btn {
+            flex: 1;
+            padding: 8px 0;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            background: none;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .chart-time-btn.active {
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+        }
+
+        /* ==========================================
+           SECTION HEADERS
+        ========================================== */
+        .section-header {
+            padding: 24px 20px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .section-link {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--green);
+            cursor: pointer;
+        }
+
+        /* ==========================================
+           MARKET MOVERS
+        ========================================== */
+        .movers {
+            padding: 0 20px;
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 4px;
+        }
+
+        .movers::-webkit-scrollbar { display: none; }
+
+        .mover-card {
+            min-width: 160px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            flex-shrink: 0;
+        }
+
+        .mover-card.drop { border-left: 3px solid var(--green); }
+        .mover-card.rise { border-left: 3px solid var(--red); }
+
+        .mover-pub {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .mover-type {
+            font-size: 10px;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .mover-price {
+            font-family: var(--font-mono);
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .mover-change {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .mover-change.down { color: var(--green); }
+        .mover-change.up { color: var(--red); }
+
+        .mover-sparkline {
+            margin-top: 12px;
+            height: 32px;
+        }
+
+        .mover-sparkline svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* ==========================================
+           WATCHLIST
+        ========================================== */
+        .watchlist {
+            padding: 0 20px;
+        }
+
+        .watchlist-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .watchlist-item:last-child { border-bottom: none; }
+
+        .watchlist-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .watchlist-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .watchlist-info { min-width: 0; }
+
+        .watchlist-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .watchlist-meta {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            margin-top: 2px;
+        }
+
+        .watchlist-center {
+            width: 64px;
+            height: 32px;
+            flex-shrink: 0;
+            margin: 0 12px;
+        }
+
+        .watchlist-center svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .watchlist-right {
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .watchlist-price {
+            font-family: var(--font-mono);
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .watchlist-change {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 2px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .watchlist-change.up {
+            color: var(--red);
+            background: var(--red-dim);
+        }
+
+        .watchlist-change.down {
+            color: var(--green);
+            background: var(--green-dim);
+        }
+
+        .watchlist-change.flat {
+            color: var(--text-tertiary);
+            background: var(--bg-elevated);
+        }
+
+        /* ==========================================
+           PRICE ALERTS
+        ========================================== */
+        .alerts {
+            padding: 0 20px;
+        }
+
+        .alert-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+
+        .alert-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .alert-icon.drop {
+            background: var(--green-dim);
+        }
+
+        .alert-icon.rise {
+            background: var(--red-dim);
+        }
+
+        .alert-icon.info {
+            background: var(--blue-dim);
+        }
+
+        .alert-content { flex: 1; }
+
+        .alert-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .alert-desc {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            line-height: 1.5;
+        }
+
+        .alert-time {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--text-tertiary);
+            flex-shrink: 0;
+        }
+
+        /* ==========================================
+           REGIONAL INDEX
+        ========================================== */
+        .regional {
+            padding: 0 20px 24px;
+        }
+
+        .regional-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+        }
+
+        .regional-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+        }
+
+        .regional-row:not(:last-child) {
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .regional-rank {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            width: 20px;
+            text-align: center;
+        }
+
+        .regional-name {
+            flex: 1;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .regional-bar-wrap {
+            width: 100px;
+            height: 6px;
+            background: var(--bg-elevated);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .regional-bar {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 1s ease;
+        }
+
+        .regional-price {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+            width: 50px;
+            text-align: right;
+        }
+
+        /* ==========================================
+           MARKET NEWS
+        ========================================== */
+        .news {
+            padding: 0 20px 24px;
+        }
+
+        .news-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            margin-bottom: 10px;
+        }
+
+        .news-eyebrow {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--amber);
+            margin-bottom: 8px;
+        }
+
+        .news-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+
+        .news-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .news-source {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        .news-time {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--text-tertiary);
+        }
+
+        /* ==========================================
+           BOTTOM TAB BAR
+        ========================================== */
+        .tab-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            display: flex;
+            padding: 8px 0 calc(8px + var(--safe-bottom));
+            z-index: 100;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            background: rgba(18, 18, 26, 0.92);
+        }
+
+        .tab-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            padding: 4px 0;
+        }
+
+        .tab-item svg {
+            width: 22px;
+            height: 22px;
+            stroke: var(--text-tertiary);
+            fill: none;
+            stroke-width: 1.8;
+            transition: all 0.2s;
+        }
+
+        .tab-item span {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            transition: all 0.2s;
+        }
+
+        .tab-item.active svg { stroke: var(--green); }
+        .tab-item.active span { color: var(--green); }
+
+        /* ==========================================
+           CONCEPT BADGE
+        ========================================== */
+        .concept-badge {
+            position: fixed;
+            bottom: calc(80px + var(--safe-bottom));
+            left: 12px;
+            background: rgba(240, 160, 48, 0.15);
+            border: 1px solid rgba(240, 160, 48, 0.3);
+            color: var(--amber);
+            font-size: 10px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+            z-index: 200;
+            font-family: var(--font-sans);
+            letter-spacing: 0.3px;
+        }
+
+        /* ==========================================
+           NARRATIVE — THE REAL COST
+        ========================================== */
+        .narrative-cost {
+            padding: 0 20px 24px;
+        }
+
+        .narrative-cost-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+        }
+
+        .narrative-cost-intro {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .narrative-cost-intro strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .narrative-bar-track {
+            width: 100%;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            display: flex;
+            margin-bottom: 8px;
+        }
+
+        .narrative-bar-segment {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--bg-primary);
+            transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .narrative-bar-segment.narrative-seg-duty { background: var(--red); }
+        .narrative-bar-segment.narrative-seg-brewery { background: var(--amber); }
+        .narrative-bar-segment.narrative-seg-rent { background: var(--blue); }
+        .narrative-bar-segment.narrative-seg-staff { background: var(--teal); }
+        .narrative-bar-segment.narrative-seg-profit { background: var(--green); }
+
+        .narrative-bar-labels {
+            display: flex;
+            gap: 0;
+            margin-bottom: 20px;
+        }
+
+        .narrative-bar-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 4px;
+        }
+
+        .narrative-bar-label-name {
+            font-size: 10px;
+            color: var(--text-tertiary);
+            text-align: center;
+            line-height: 1.3;
+            font-weight: 500;
+        }
+
+        .narrative-bar-label-value {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .narrative-bar-label-pct {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+        }
+
+        .narrative-cost-callout {
+            background: var(--bg-elevated);
+            border-left: 3px solid var(--amber);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            padding: 14px 16px;
+            margin-top: 4px;
+        }
+
+        .narrative-cost-callout p {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        .narrative-cost-callout span {
+            color: var(--amber);
+        }
+
+        /* ==========================================
+           NARRATIVE — PUBS WE'RE LOSING
+        ========================================== */
+        .narrative-closures {
+            padding: 0 20px 24px;
+        }
+
+        .narrative-closures-card {
+            background: linear-gradient(180deg, rgba(255, 71, 87, 0.06) 0%, var(--bg-card) 40%);
+            border: 1px solid rgba(255, 71, 87, 0.15);
+            border-radius: var(--radius-lg);
+            padding: 32px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .narrative-closures-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: url('closed-pub-web.jpg') center top / cover no-repeat;
+            opacity: 0.12;
+            mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+            -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+        }
+
+        .narrative-closures-counter {
+            font-family: var(--font-mono);
+            font-size: 72px;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -3px;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .narrative-closures-counter .narrative-plus {
+            color: var(--red);
+            font-size: 48px;
+        }
+
+        .narrative-closures-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .narrative-closures-rate {
+            font-family: var(--font-mono);
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--red);
+            margin-bottom: 28px;
+        }
+
+        .narrative-closures-stats {
+            display: flex;
+            justify-content: center;
+            gap: 0;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+
+        .narrative-closures-stat {
+            padding: 0 14px;
+            border-right: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .narrative-closures-stat:last-child {
+            border-right: none;
+        }
+
+        .narrative-closures-stat-value {
+            font-family: var(--font-mono);
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .narrative-closures-stat-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-tertiary);
+            font-weight: 600;
+        }
+
+        .narrative-closures-quote {
+            font-size: 14px;
+            font-style: italic;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            max-width: 320px;
+            margin: 0 auto;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        /* ==========================================
+           NARRATIVE — INFLATION COMPARISON
+        ========================================== */
+        .narrative-inflation {
+            padding: 0 20px 24px;
+        }
+
+        .narrative-inflation-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+        }
+
+        .narrative-inflation-subtitle {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .narrative-inflation-rows {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        .narrative-inflation-row {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .narrative-inflation-row-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .narrative-inflation-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .narrative-inflation-value {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .narrative-inflation-value.narrative-highlight { color: var(--red); }
+        .narrative-inflation-value.narrative-neutral { color: var(--text-primary); }
+
+        .narrative-inflation-bar-track {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-elevated);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .narrative-inflation-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .narrative-inflation-bar-fill.narrative-bar-pint { background: var(--red); }
+        .narrative-inflation-bar-fill.narrative-bar-cpi { background: var(--text-tertiary); }
+        .narrative-inflation-bar-fill.narrative-bar-wage { background: var(--amber); }
+        .narrative-inflation-bar-fill.narrative-bar-house { background: var(--blue); }
+
+        .narrative-inflation-divider {
+            height: 1px;
+            background: var(--border-light);
+            margin: 20px 0;
+        }
+
+        .narrative-inflation-insight {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .narrative-inflation-insight-block {
+            text-align: center;
+            flex: 1;
+        }
+
+        .narrative-inflation-insight-year {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-tertiary);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .narrative-inflation-insight-pints {
+            font-family: var(--font-mono);
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1;
+        }
+
+        .narrative-inflation-insight-pints small {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            font-weight: 500;
+        }
+
+        .narrative-inflation-insight-arrow {
+            font-size: 20px;
+            color: var(--red);
+            flex-shrink: 0;
+        }
+
+        .narrative-inflation-footnote {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .narrative-inflation-footnote strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .narrative-inflation-footnote .narrative-emphasis {
+            color: var(--red);
+            font-family: var(--font-mono);
+            font-weight: 700;
+        }
+
+        /* ==========================================
+           ANIMATIONS
+        ========================================== */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Stagger children */
+        .stagger > *:nth-child(1) { transition-delay: 0s; }
+        .stagger > *:nth-child(2) { transition-delay: 0.08s; }
+        .stagger > *:nth-child(3) { transition-delay: 0.16s; }
+        .stagger > *:nth-child(4) { transition-delay: 0.24s; }
+        .stagger > *:nth-child(5) { transition-delay: 0.32s; }
+        .stagger > *:nth-child(6) { transition-delay: 0.4s; }
+
+        /* Pulse animation for live indicator */
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--green);
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulse 2s ease infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 var(--green-glow); }
+            50% { opacity: 0.7; box-shadow: 0 0 0 6px transparent; }
+        }
+
+        /* Number count-up */
+        .count-up {
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Shimmer for loading feel */
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
+        /* Candle animation */
+        @keyframes candleGrow {
+            from { transform: scaleY(0); }
+            to { transform: scaleY(1); }
+        }
+
+        .candle {
+            transform-origin: bottom;
+            animation: candleGrow 0.6s ease forwards;
+        }
+
+        /* Chart line draw */
+        .chart-line-animate {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawLine 2s ease forwards;
+        }
+
+        @keyframes drawLine {
+            to { stroke-dashoffset: 0; }
+        }
+
+        .chart-area-animate {
+            opacity: 0;
+            animation: fadeIn 1s ease 1.5s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LOADER -->
+    <div class="loader" id="loader">
+        <div class="loader-logo">PPI<span>.market</span></div>
+        <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+        <div class="loader-text">FETCHING LIVE PRICES...</div>
+    </div>
+
+    <!-- CONCEPT BADGE -->
+    <div class="concept-badge">Loading data...</div>
+
+    <!-- STATUS BAR -->
+    <div class="status-bar">
+        <div class="status-bar-time" id="statusTime">9:41</div>
+        <div class="status-bar-icons">
+            <svg viewBox="0 0 16 16"><path d="M1 10l3-3 3 3 3-5 3 2" stroke="currentColor" fill="none" stroke-width="1.5"/></svg>
+            <svg viewBox="0 0 16 16"><rect x="1" y="4" width="11" height="8" rx="1" stroke="currentColor" fill="none" stroke-width="1.2"/><rect x="3" y="6" width="7" height="4" rx="0.5" fill="currentColor"/><rect x="12" y="6.5" width="2" height="3" rx="0.5" fill="currentColor"/></svg>
+        </div>
+    </div>
+
+    <!-- APP HEADER -->
+    <header class="app-header">
+        <div class="app-logo">
+            <div class="app-logo-icon"><img src="logo-web.jpg" alt="PPI"></div>
+            <div class="app-logo-text">PintPrice<span>Index</span></div>
+        </div>
+        <div class="header-actions">
+            <div class="header-btn">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+            </div>
+            <div class="header-btn">
+                <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                <div class="notification-dot"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- LIVE TICKER -->
+    <div class="ticker-wrap">
+        <div class="ticker" id="ticker">
+            <!-- Populated by JS -->
+        </div>
+    </div>
+
+    <!-- PORTFOLIO -->
+    <section class="portfolio fade-up">
+        <div class="portfolio-label">Avg. Pint Price — Sheffield</div>
+        <div class="portfolio-value">
+            <span class="currency">£</span><span class="count-up" data-target="4.13">0.00</span>
+        </div>
+        <div class="portfolio-change positive">
+            ▲ £0.50 (13.8%) <span class="label">since Feb 2023 · CAMRA survey</span>
+        </div>
+
+        <div class="portfolio-stats stagger">
+            <div class="portfolio-stat fade-up">
+                <div class="portfolio-stat-label">Cheapest</div>
+                <div class="portfolio-stat-value green">£2.40</div>
+            </div>
+            <div class="portfolio-stat fade-up">
+                <div class="portfolio-stat-label">National Avg</div>
+                <div class="portfolio-stat-value amber">£4.83</div>
+            </div>
+            <div class="portfolio-stat fade-up">
+                <div class="portfolio-stat-label">London Avg</div>
+                <div class="portfolio-stat-value red">£6.10</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CHART -->
+    <section class="chart-section fade-up">
+        <div class="chart-header">
+            <div>
+                <div class="chart-pub-name">UK Avg. Pint <span class="live-dot"></span></div>
+                <div class="chart-pub-type">ONS National Average · Loading...</div>
+            </div>
+            <div class="chart-current">
+                <div class="chart-current-price">£4.83</div>
+                <div class="chart-current-change">▲ £0.14 (3.0%)</div>
+            </div>
+        </div>
+
+        <div class="chart-canvas" id="chartCanvas">
+            <svg viewBox="0 0 350 200" preserveAspectRatio="none">
+                <defs>
+                    <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="var(--red)" stop-opacity="0.25"/>
+                        <stop offset="100%" stop-color="var(--red)" stop-opacity="0"/>
+                    </linearGradient>
+                    <linearGradient id="chartGradGreen" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="var(--green)" stop-opacity="0.2"/>
+                        <stop offset="100%" stop-color="var(--green)" stop-opacity="0"/>
+                    </linearGradient>
+                </defs>
+
+                <!-- Grid lines -->
+                <line x1="0" y1="50" x2="350" y2="50" stroke="var(--border-light)" stroke-width="0.5" stroke-dasharray="4,4"/>
+                <line x1="0" y1="100" x2="350" y2="100" stroke="var(--border-light)" stroke-width="0.5" stroke-dasharray="4,4"/>
+                <line x1="0" y1="150" x2="350" y2="150" stroke="var(--border-light)" stroke-width="0.5" stroke-dasharray="4,4"/>
+
+                <!-- Price labels -->
+                <text x="340" y="48" fill="var(--text-tertiary)" font-size="8" font-family="var(--font-mono)" text-anchor="end">£6.20</text>
+                <text x="340" y="98" fill="var(--text-tertiary)" font-size="8" font-family="var(--font-mono)" text-anchor="end">£5.60</text>
+                <text x="340" y="148" fill="var(--text-tertiary)" font-size="8" font-family="var(--font-mono)" text-anchor="end">£5.00</text>
+
+                <!-- Area fill -->
+                <path class="chart-area-animate" d="M0,160 L25,155 50,150 75,140 100,142 125,130 150,128 175,120 200,125 225,115 250,100 275,95 300,80 325,60 350,45 350,200 0,200Z" fill="url(#chartGrad)"/>
+
+                <!-- Price line -->
+                <polyline class="chart-line-animate" points="0,160 25,155 50,150 75,140 100,142 125,130 150,128 175,120 200,125 225,115 250,100 275,95 300,80 325,60 350,45" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
+                <!-- Current price dot -->
+                <circle cx="350" cy="45" r="4" fill="var(--red)" opacity="0">
+                    <animate attributeName="opacity" from="0" to="1" begin="2s" dur="0.3s" fill="freeze"/>
+                </circle>
+                <circle cx="350" cy="45" r="8" fill="var(--red)" opacity="0">
+                    <animate attributeName="opacity" values="0;0.3;0" begin="2s" dur="2s" repeatCount="indefinite"/>
+                    <animate attributeName="r" values="4;12;4" begin="2s" dur="2s" repeatCount="indefinite"/>
+                </circle>
+            </svg>
+        </div>
+
+        <div class="chart-time-toggles">
+            <button class="chart-time-btn">1D</button>
+            <button class="chart-time-btn">1W</button>
+            <button class="chart-time-btn active">1M</button>
+            <button class="chart-time-btn">6M</button>
+            <button class="chart-time-btn">1Y</button>
+            <button class="chart-time-btn">ALL</button>
+        </div>
+    </section>
+
+    <!-- MARKET MOVERS -->
+    <div class="section-header">
+        <div class="section-title">Market Movers</div>
+        <div class="section-link">See all →</div>
+    </div>
+
+    <div class="movers" id="movers">
+        <div class="mover-card drop">
+            <div class="mover-pub">The Brown Bear</div>
+            <div class="mover-type">Sheffield · Sam Smith's</div>
+            <div class="mover-price">£2.40</div>
+            <div class="mover-change down">▼ 4.0%</div>
+            <div class="mover-sparkline">
+                <svg viewBox="0 0 120 32" preserveAspectRatio="none">
+                    <polyline points="0,5 15,8 30,12 45,10 60,15 75,18 90,22 105,25 120,28" fill="none" stroke="var(--green)" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </div>
+        </div>
+        <div class="mover-card drop">
+            <div class="mover-pub">The Globe</div>
+            <div class="mover-type">Sheffield · John Smith's</div>
+            <div class="mover-price">£2.55</div>
+            <div class="mover-change down">▼ 3.8%</div>
+            <div class="mover-sparkline">
+                <svg viewBox="0 0 120 32" preserveAspectRatio="none">
+                    <polyline points="0,4 15,6 30,5 45,10 60,12 75,16 90,20 105,24 120,30" fill="none" stroke="var(--green)" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </div>
+        </div>
+        <div class="mover-card rise">
+            <div class="mover-pub">Sheffield Tap</div>
+            <div class="mover-type">Sheffield · Craft Cask</div>
+            <div class="mover-price">£5.20</div>
+            <div class="mover-change up">▲ 6.1%</div>
+            <div class="mover-sparkline">
+                <svg viewBox="0 0 120 32" preserveAspectRatio="none">
+                    <polyline points="0,28 15,25 30,22 45,24 60,18 75,15 90,10 105,8 120,4" fill="none" stroke="var(--red)" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </div>
+        </div>
+        <div class="mover-card rise">
+            <div class="mover-pub">True North</div>
+            <div class="mover-type">Sheffield · Craft Brewery</div>
+            <div class="mover-price">£5.20</div>
+            <div class="mover-change up">▲ 4.2%</div>
+            <div class="mover-sparkline">
+                <svg viewBox="0 0 120 32" preserveAspectRatio="none">
+                    <polyline points="0,30 15,26 30,24 45,20 60,18 75,14 90,12 105,8 120,5" fill="none" stroke="var(--red)" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </div>
+        </div>
+        <div class="mover-card drop">
+            <div class="mover-pub">Wetherspoons</div>
+            <div class="mover-type">Woodseats Palace · Lager</div>
+            <div class="mover-price">£2.97</div>
+            <div class="mover-change down">▼ 2.3%</div>
+            <div class="mover-sparkline">
+                <svg viewBox="0 0 120 32" preserveAspectRatio="none">
+                    <polyline points="0,8 15,10 30,12 45,14 60,16 75,18 90,22 105,26 120,28" fill="none" stroke="var(--green)" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- WATCHLIST -->
+    <div class="section-header">
+        <div class="section-title">Your Watchlist</div>
+        <div class="section-link">Edit</div>
+    </div>
+
+    <div class="watchlist stagger">
+        <div class="watchlist-item fade-up">
+            <div class="watchlist-left">
+                <div class="watchlist-icon" style="background: var(--red-dim);">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><path d="M6 1v3M10 1v3M14 1v3"/></svg>
+                </div>
+                <div class="watchlist-info">
+                    <div class="watchlist-name">Sheffield Tap</div>
+                    <div class="watchlist-meta">Platform 1 · Craft Bar</div>
+                </div>
+            </div>
+            <div class="watchlist-center">
+                <svg viewBox="0 0 64 32" preserveAspectRatio="none">
+                    <polyline points="0,24 8,22 16,20 24,18 32,19 40,15 48,12 56,8 64,5" fill="none" stroke="var(--red)" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div class="watchlist-right">
+                <div class="watchlist-price">£5.20</div>
+                <div class="watchlist-change up">+6.1%</div>
+            </div>
+        </div>
+
+        <div class="watchlist-item fade-up">
+            <div class="watchlist-left">
+                <div class="watchlist-icon" style="background: var(--green-dim);">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                </div>
+                <div class="watchlist-info">
+                    <div class="watchlist-name">The Brown Bear</div>
+                    <div class="watchlist-meta">Norfolk St · Sam Smith's</div>
+                </div>
+            </div>
+            <div class="watchlist-center">
+                <svg viewBox="0 0 64 32" preserveAspectRatio="none">
+                    <polyline points="0,8 8,10 16,12 24,14 32,16 40,20 48,22 56,26 64,28" fill="none" stroke="var(--green)" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div class="watchlist-right">
+                <div class="watchlist-price">£2.40</div>
+                <div class="watchlist-change down">-4.0%</div>
+            </div>
+        </div>
+
+        <div class="watchlist-item fade-up">
+            <div class="watchlist-left">
+                <div class="watchlist-icon" style="background: var(--amber-dim);">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><path d="M6 1v3M10 1v3M14 1v3"/></svg>
+                </div>
+                <div class="watchlist-info">
+                    <div class="watchlist-name">Kelham Island Tavern</div>
+                    <div class="watchlist-meta">Kelham · Cask Ale · CAMRA award</div>
+                </div>
+            </div>
+            <div class="watchlist-center">
+                <svg viewBox="0 0 64 32" preserveAspectRatio="none">
+                    <polyline points="0,16 8,16 16,15 24,16 32,16 40,15 48,16 56,16 64,15" fill="none" stroke="var(--text-tertiary)" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div class="watchlist-right">
+                <div class="watchlist-price">£4.20</div>
+                <div class="watchlist-change flat">+1.2%</div>
+            </div>
+        </div>
+
+        <div class="watchlist-item fade-up">
+            <div class="watchlist-left">
+                <div class="watchlist-icon" style="background: var(--blue-dim);">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><path d="M6 1v3M10 1v3M14 1v3"/></svg>
+                </div>
+                <div class="watchlist-info">
+                    <div class="watchlist-name">Fagans</div>
+                    <div class="watchlist-meta">Broad Lane · Traditional</div>
+                </div>
+            </div>
+            <div class="watchlist-center">
+                <svg viewBox="0 0 64 32" preserveAspectRatio="none">
+                    <polyline points="0,18 8,17 16,18 24,16 32,15 40,14 48,12 56,10 64,8" fill="none" stroke="var(--red)" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div class="watchlist-right">
+                <div class="watchlist-price">£4.20</div>
+                <div class="watchlist-change up">+2.4%</div>
+            </div>
+        </div>
+
+        <div class="watchlist-item fade-up">
+            <div class="watchlist-left">
+                <div class="watchlist-icon" style="background: var(--green-dim);">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                </div>
+                <div class="watchlist-info">
+                    <div class="watchlist-name">Wetherspoons</div>
+                    <div class="watchlist-meta">Woodseats Palace · Chain</div>
+                </div>
+            </div>
+            <div class="watchlist-center">
+                <svg viewBox="0 0 64 32" preserveAspectRatio="none">
+                    <polyline points="0,12 8,14 16,15 24,16 32,18 40,20 48,22 56,25 64,27" fill="none" stroke="var(--green)" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div class="watchlist-right">
+                <div class="watchlist-price">£2.97</div>
+                <div class="watchlist-change down">-2.3%</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRICE ALERTS -->
+    <div class="section-header">
+        <div class="section-title">Price Alerts</div>
+        <div class="section-link">Manage</div>
+    </div>
+
+    <div class="alerts stagger">
+        <div class="alert-card fade-up">
+            <div class="alert-icon drop">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>
+            </div>
+            <div class="alert-content">
+                <div class="alert-title">Brown Bear holds at £2.40</div>
+                <div class="alert-desc">Sam Smith's XXXX Best — cheapest pint in Sheffield. Sam Smith's keep prices low by banning phones.</div>
+            </div>
+            <div class="alert-time">2m</div>
+        </div>
+
+        <div class="alert-card fade-up">
+            <div class="alert-icon rise">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            </div>
+            <div class="alert-content">
+                <div class="alert-title">Sheffield avg up 13.8% since 2023</div>
+                <div class="alert-desc">CAMRA Beer Capital Survey: real ale avg hit £4.13 — up 50p from Feb 2023</div>
+            </div>
+            <div class="alert-time">18m</div>
+        </div>
+
+        <div class="alert-card fade-up">
+            <div class="alert-icon info">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            </div>
+            <div class="alert-content">
+                <div class="alert-title">Beer duty up 3.66% from Feb 2026</div>
+                <div class="alert-desc">RPI uprating adds ~2p/pint. Government's 1p "draught relief cut" already wiped out.</div>
+            </div>
+            <div class="alert-time">1h</div>
+        </div>
+    </div>
+
+    <!-- REGIONAL INDEX -->
+    <div class="section-header">
+        <div class="section-title">Regional Index</div>
+        <div class="section-link">Full map →</div>
+    </div>
+
+    <div class="regional fade-up">
+        <div class="regional-card">
+            <div class="regional-row">
+                <div class="regional-rank">1</div>
+                <div class="regional-name">London</div>
+                <div class="regional-bar-wrap">
+                    <div class="regional-bar" style="width: 100%; background: var(--red);"></div>
+                </div>
+                <div class="regional-price">£6.10</div>
+            </div>
+            <div class="regional-row">
+                <div class="regional-rank">2</div>
+                <div class="regional-name">South East</div>
+                <div class="regional-bar-wrap">
+                    <div class="regional-bar" style="width: 81%; background: var(--red);"></div>
+                </div>
+                <div class="regional-price">£4.94</div>
+            </div>
+            <div class="regional-row">
+                <div class="regional-rank">3</div>
+                <div class="regional-name">South West</div>
+                <div class="regional-bar-wrap">
+                    <div class="regional-bar" style="width: 80.8%; background: var(--amber);"></div>
+                </div>
+                <div class="regional-price">£4.93</div>
+            </div>
+            <div class="regional-row">
+                <div class="regional-rank">4</div>
+                <div class="regional-name">Scotland</div>
+                <div class="regional-bar-wrap">
+                    <div class="regional-bar" style="width: 78.7%; background: var(--amber);"></div>
+                </div>
+                <div class="regional-price">£4.80</div>
+            </div>
+            <div class="regional-row">
+                <div class="regional-rank">5</div>
+                <div class="regional-name">North West</div>
+                <div class="regional-bar-wrap">
+                    <div class="regional-bar" style="width: 78.7%; background: var(--amber);"></div>
+                </div>
+                <div class="regional-price">£4.80</div>
+            </div>
+            <div class="regional-row">
+                <div class="regional-rank">6</div>
+                <div class="regional-name">Wales</div>
+                <div class="regional-bar-wrap">
+                    <div class="regional-bar" style="width: 77.7%; background: var(--amber);"></div>
+                </div>
+                <div class="regional-price">£4.74</div>
+            </div>
+            <div class="regional-row">
+                <div class="regional-rank">7</div>
+                <div class="regional-name">Midlands</div>
+                <div class="regional-bar-wrap">
+                    <div class="regional-bar" style="width: 76.7%; background: var(--green);"></div>
+                </div>
+                <div class="regional-price">£4.68</div>
+            </div>
+            <div class="regional-row">
+                <div class="regional-rank">8</div>
+                <div class="regional-name">Sheffield</div>
+                <div class="regional-bar-wrap">
+                    <div class="regional-bar" style="width: 67.7%; background: var(--green);"></div>
+                </div>
+                <div class="regional-price">£4.13</div>
+            </div>
+        </div>
+        <div style="font-size: 10px; color: var(--text-tertiary); margin-top: 10px; font-family: var(--font-mono); letter-spacing: 0.3px;">Source: Morning Advertiser Pint Price Survey 2025 · CAMRA Sheffield Beer Capital Survey</div>
+    </div>
+
+    <!-- THE REAL COST — PINT PRICE BREAKDOWN -->
+    <div class="section-header fade-up">
+        <div class="section-title">The Real Cost</div>
+        <div class="section-link">Where your money goes</div>
+    </div>
+
+    <div class="narrative-cost fade-up">
+        <div class="narrative-cost-card">
+            <div class="narrative-cost-intro">
+                The average UK pint now costs <strong>£4.83</strong>. A third of that goes straight to the government. Here's where every penny ends up.
+            </div>
+
+            <div class="narrative-bar-track" id="narrativeCostBar">
+                <div class="narrative-bar-segment narrative-seg-duty" style="width: 33.4%;">33%</div>
+                <div class="narrative-bar-segment narrative-seg-brewery" style="width: 21.7%;">22%</div>
+                <div class="narrative-bar-segment narrative-seg-rent" style="width: 24.1%;">24%</div>
+                <div class="narrative-bar-segment narrative-seg-staff" style="width: 17.8%;">18%</div>
+                <div class="narrative-bar-segment narrative-seg-profit" style="width: 3%;font-size:8px;">3%</div>
+            </div>
+
+            <div class="narrative-bar-labels">
+                <div class="narrative-bar-label" style="width: 33.4%;">
+                    <div class="narrative-bar-label-name">Tax (Duty, VAT, Rates)</div>
+                    <div class="narrative-bar-label-value" style="color: var(--red);">£1.61</div>
+                </div>
+                <div class="narrative-bar-label" style="width: 21.7%;">
+                    <div class="narrative-bar-label-name">Brewery / Supplier</div>
+                    <div class="narrative-bar-label-value" style="color: var(--amber);">£1.05</div>
+                </div>
+                <div class="narrative-bar-label" style="width: 24.1%;">
+                    <div class="narrative-bar-label-name">Rent & Overheads</div>
+                    <div class="narrative-bar-label-value" style="color: var(--blue);">£1.16</div>
+                </div>
+                <div class="narrative-bar-label" style="width: 17.8%;">
+                    <div class="narrative-bar-label-name">Staff</div>
+                    <div class="narrative-bar-label-value" style="color: var(--teal);">£0.86</div>
+                </div>
+                <div class="narrative-bar-label" style="width: 3%;">
+                    <div class="narrative-bar-label-name">Profit</div>
+                    <div class="narrative-bar-label-value" style="color: var(--green);">12p</div>
+                </div>
+            </div>
+
+            <div class="narrative-cost-callout">
+                <p>The pub keeps <span>12p</span> from every pint. Down from 84p in 2009.</p>
+            </div>
+            <div style="font-size: 10px; color: var(--text-tertiary); margin-top: 12px; font-family: var(--font-mono); letter-spacing: 0.3px;">Source: BBPA / Oxford Economics 2024</div>
+        </div>
+    </div>
+
+    <!-- PUBS WE'RE LOSING — CLOSURE COUNTER -->
+    <div class="section-header fade-up">
+        <div class="section-title">Pubs We're Losing</div>
+        <div class="section-link" style="color: var(--red);">The crisis</div>
+    </div>
+
+    <div class="narrative-closures fade-up">
+        <div class="narrative-closures-card">
+            <div class="narrative-closures-bg"></div>
+            <div class="narrative-closures-counter">
+                <span class="count-up" data-target="6900" data-format="integer" id="closureCounter">0</span><span class="narrative-plus">+</span>
+            </div>
+            <div class="narrative-closures-subtitle">net pub closures in the last decade</div>
+            <div class="narrative-closures-rate">6 pubs closing every single week</div>
+
+            <div class="narrative-closures-stats">
+                <div class="narrative-closures-stat">
+                    <div class="narrative-closures-stat-value">45,000</div>
+                    <div class="narrative-closures-stat-label">Pubs remain</div>
+                </div>
+                <div class="narrative-closures-stat">
+                    <div class="narrative-closures-stat-value">51,900</div>
+                    <div class="narrative-closures-stat-label">In 2014</div>
+                </div>
+                <div class="narrative-closures-stat">
+                    <div class="narrative-closures-stat-value" style="color: var(--red);">-13%</div>
+                    <div class="narrative-closures-stat-label">In 10 years</div>
+                </div>
+            </div>
+
+            <div class="narrative-closures-quote">
+                "Every pub that closes is a community that loses its living room."
+            </div>
+            <div style="font-size: 10px; color: var(--text-tertiary); margin-top: 16px; font-family: var(--font-mono); letter-spacing: 0.3px;">Source: BBPA pub numbers 2014–2024 · CAMRA closures report Feb 2025</div>
+        </div>
+    </div>
+
+    <!-- YOUR PINT VS EVERYTHING — INFLATION COMPARISON -->
+    <div class="section-header fade-up">
+        <div class="section-title">Your Pint vs. Everything</div>
+        <div class="section-link">Since 2010</div>
+    </div>
+
+    <div class="narrative-inflation fade-up">
+        <div class="narrative-inflation-card">
+            <div class="narrative-inflation-subtitle">Growth since 2010 · ONS, GOV.UK, HMRC verified data</div>
+
+            <div class="narrative-inflation-rows">
+                <div class="narrative-inflation-row">
+                    <div class="narrative-inflation-row-header">
+                        <span class="narrative-inflation-label">Minimum wage</span>
+                        <span class="narrative-inflation-value" style="color: var(--amber);">+106%</span>
+                    </div>
+                    <div class="narrative-inflation-bar-track">
+                        <div class="narrative-inflation-bar-fill narrative-bar-wage" style="width: 100%;"></div>
+                    </div>
+                </div>
+
+                <div class="narrative-inflation-row">
+                    <div class="narrative-inflation-row-header">
+                        <span class="narrative-inflation-label">House prices</span>
+                        <span class="narrative-inflation-value narrative-neutral">+74%</span>
+                    </div>
+                    <div class="narrative-inflation-bar-track">
+                        <div class="narrative-inflation-bar-fill narrative-bar-house" style="width: 69.8%;"></div>
+                    </div>
+                </div>
+
+                <div class="narrative-inflation-row">
+                    <div class="narrative-inflation-row-header">
+                        <span class="narrative-inflation-label">Avg pint price</span>
+                        <span class="narrative-inflation-value narrative-highlight">+73%</span>
+                    </div>
+                    <div class="narrative-inflation-bar-track">
+                        <div class="narrative-inflation-bar-fill narrative-bar-pint" style="width: 68.9%;"></div>
+                    </div>
+                </div>
+
+                <div class="narrative-inflation-row">
+                    <div class="narrative-inflation-row-header">
+                        <span class="narrative-inflation-label">General inflation (CPI)</span>
+                        <span class="narrative-inflation-value narrative-neutral">+45%</span>
+                    </div>
+                    <div class="narrative-inflation-bar-track">
+                        <div class="narrative-inflation-bar-fill narrative-bar-cpi" style="width: 42.5%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="narrative-inflation-divider"></div>
+
+            <div class="narrative-inflation-insight">
+                <div class="narrative-inflation-insight-block">
+                    <div class="narrative-inflation-insight-year">2010</div>
+                    <div class="narrative-inflation-insight-pints">2.1 <small>pints/hr</small></div>
+                </div>
+                <div class="narrative-inflation-insight-arrow">→</div>
+                <div class="narrative-inflation-insight-block">
+                    <div class="narrative-inflation-insight-year">2025</div>
+                    <div class="narrative-inflation-insight-pints" style="color: var(--green);">2.5 <small>pints/hr</small></div>
+                </div>
+            </div>
+
+            <div class="narrative-inflation-footnote">
+                On minimum wage you can buy <strong>more pints per hour</strong> than in 2010. But the pub that serves them makes just <span class="narrative-emphasis">12p</span> on each one.
+            </div>
+            <div style="font-size: 10px; color: var(--text-tertiary); margin-top: 12px; font-family: var(--font-mono); letter-spacing: 0.3px;">Source: ONS RPI (CZMS) · GOV.UK NLW rates · ONS House Price Index</div>
+        </div>
+    </div>
+
+    <!-- MARKET NEWS -->
+    <div class="section-header">
+        <div class="section-title">Market Analysis</div>
+        <div class="section-link">More →</div>
+    </div>
+
+    <div class="news stagger">
+        <div class="news-card fade-up">
+            <div class="news-eyebrow">Data</div>
+            <div class="news-title">Pub profit collapsed from 84p to 12p per pint since 2009 — BBPA calls for emergency duty cut</div>
+            <div class="news-meta">
+                <div class="news-source">BBPA / Oxford Economics</div>
+                <div class="news-time">2024</div>
+            </div>
+        </div>
+
+        <div class="news-card fade-up">
+            <div class="news-eyebrow">Analysis</div>
+            <div class="news-title">A third goes to the taxman: why UK pubs pay more tax per pint than any other European country</div>
+            <div class="news-meta">
+                <div class="news-source">PPI Research · Brauwelt</div>
+                <div class="news-time">2025</div>
+            </div>
+        </div>
+
+        <div class="news-card fade-up">
+            <div class="news-eyebrow">Regional</div>
+            <div class="news-title">Sheffield bucks the trend: city average £4.13 is 70p below national — but craft premium is growing</div>
+            <div class="news-meta">
+                <div class="news-source">CAMRA Beer Capital Survey</div>
+                <div class="news-time">May 2025</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Spacer for bottom bar -->
+    <div style="height: 32px;"></div>
+
+    <!-- BOTTOM TAB BAR -->
+    <nav class="tab-bar">
+        <div class="tab-item active">
+            <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            <span>Markets</span>
+        </div>
+        <div class="tab-item">
+            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <span>Watchlist</span>
+        </div>
+        <div class="tab-item">
+            <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span>Alerts</span>
+        </div>
+        <div class="tab-item">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>Profile</span>
+        </div>
+    </nav>
+
+    <script>
+        // ==========================================
+        // APP STATE — loaded from data.json
+        // ==========================================
+        let APP_DATA = null;
+
+        // ==========================================
+        // LOADER
+        // ==========================================
+        window.addEventListener('load', async () => {
+            try {
+                const res = await fetch('data.json');
+                APP_DATA = await res.json();
+                initApp();
+            } catch (e) {
+                console.warn('data.json not found, using inline data');
+                initApp();
+            }
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 2200);
+        });
+
+        function initApp() {
+            updateTime();
+            setInterval(updateTime, 30000);
+            buildTicker();
+            initScrollReveal();
+            initCountUp();
+            initChartFromData();
+            initTabBar();
+            initTickerSimulation();
+
+            // Show data freshness
+            if (APP_DATA && APP_DATA.lastUpdated) {
+                const badge = document.querySelector('.concept-badge');
+                if (badge) badge.textContent = `Data: ${APP_DATA.lastUpdated} · ONS CZMS`;
+            }
+        }
+
+        // ==========================================
+        // STATUS BAR TIME
+        // ==========================================
+        function updateTime() {
+            const now = new Date();
+            const h = now.getHours().toString().padStart(2, '0');
+            const m = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('statusTime').textContent = `${h}:${m}`;
+        }
+
+        // ==========================================
+        // LIVE TICKER — from data.json
+        // ==========================================
+        function buildTicker() {
+            const pubs = APP_DATA ? APP_DATA.sheffield.pubs : [];
+            const tickerData = pubs.map(p => ({
+                name: p.ticker,
+                price: p.price.toFixed(2),
+                change: (p.change >= 0 ? '+' : '') + p.change.toFixed(1) + '%',
+                dir: p.change >= 0 ? 'up' : 'down'
+            }));
+
+            const tickerEl = document.getElementById('ticker');
+            const tickerHTML = [...tickerData, ...tickerData].map(t => `
+                <div class="ticker-item">
+                    <span class="ticker-name">${t.name}</span>
+                    <span class="ticker-price">£${t.price}</span>
+                    <span class="ticker-change ${t.dir}">${t.change}</span>
+                </div>
+            `).join('');
+            tickerEl.innerHTML = tickerHTML;
+        }
+
+        // ==========================================
+        // SCROLL REVEAL
+        // ==========================================
+        function initScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('visible');
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+            document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+        }
+
+        // ==========================================
+        // COUNT UP ANIMATION
+        // ==========================================
+        function initCountUp() {
+            const countObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const el = entry.target;
+                        const target = parseFloat(el.dataset.target);
+                        animateCount(el, 0, target, 1500);
+                        countObserver.unobserve(el);
+                    }
+                });
+            }, { threshold: 0.5 });
+            document.querySelectorAll('.count-up').forEach(el => countObserver.observe(el));
+        }
+
+        function animateCount(el, start, end, duration) {
+            const isInteger = el.dataset.format === 'integer';
+            const startTime = performance.now();
+            function update(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 4);
+                const current = start + (end - start) * eased;
+                if (isInteger) {
+                    el.textContent = Math.round(current).toLocaleString('en-GB');
+                } else {
+                    el.textContent = current.toFixed(2);
+                }
+                if (progress < 1) requestAnimationFrame(update);
+            }
+            requestAnimationFrame(update);
+        }
+
+        // ==========================================
+        // INTERACTIVE CHART — real ONS data
+        // ==========================================
+        let chartMonthly = [];
+
+        function initChartFromData() {
+            if (!APP_DATA) return;
+            chartMonthly = APP_DATA.national.monthly;
+
+            // Wire up time toggles
+            const btns = document.querySelectorAll('.chart-time-btn');
+            const periods = { '1D': 1, '1W': 1, '1M': 1, '6M': 6, '1Y': 12, 'ALL': 9999 };
+
+            btns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelector('.chart-time-btn.active').classList.remove('active');
+                    btn.classList.add('active');
+                    const months = periods[btn.textContent] || 12;
+                    renderChart(months);
+                });
+            });
+
+            // Render default (1Y)
+            renderChart(12);
+        }
+
+        function renderChart(monthsBack) {
+            if (!chartMonthly.length) return;
+
+            const data = monthsBack >= 9999 ? chartMonthly : chartMonthly.slice(-monthsBack);
+            if (data.length < 2) return;
+
+            const prices = data.map(d => d.price);
+            const minP = Math.min(...prices);
+            const maxP = Math.max(...prices);
+            const range = maxP - minP || 0.10;
+            const padding = range * 0.1;
+
+            const W = 350, H = 200, padTop = 20, padBot = 20;
+            const usableH = H - padTop - padBot;
+
+            // Build polyline points
+            const points = prices.map((p, i) => {
+                const x = (i / (prices.length - 1)) * W;
+                const y = padTop + usableH - ((p - minP + padding) / (range + padding * 2)) * usableH;
+                return `${x.toFixed(1)},${y.toFixed(1)}`;
+            });
+
+            const lastY = parseFloat(points[points.length - 1].split(',')[1]);
+            const firstPrice = prices[0];
+            const lastPrice = prices[prices.length - 1];
+            const isUp = lastPrice >= firstPrice;
+            const color = isUp ? 'var(--red)' : 'var(--green)';
+            const gradId = isUp ? 'chartGrad' : 'chartGradGreen';
+
+            // Price labels
+            const midP = (minP + maxP) / 2;
+            const topLabel = `£${maxP.toFixed(2)}`;
+            const midLabel = `£${midP.toFixed(2)}`;
+            const botLabel = `£${minP.toFixed(2)}`;
+
+            // Area path (close to bottom)
+            const areaPath = `M${points[0]} ${points.slice(1).map(p => `L${p}`).join(' ')} L${W},${H} L0,${H}Z`;
+
+            const svg = `
+                <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
+                    <defs>
+                        <linearGradient id="dynGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="${color}" stop-opacity="0.25"/>
+                            <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
+                        </linearGradient>
+                    </defs>
+                    <line x1="0" y1="${padTop + usableH * 0.05}" x2="${W}" y2="${padTop + usableH * 0.05}" stroke="var(--border-light)" stroke-width="0.5" stroke-dasharray="4,4"/>
+                    <line x1="0" y1="${padTop + usableH * 0.5}" x2="${W}" y2="${padTop + usableH * 0.5}" stroke="var(--border-light)" stroke-width="0.5" stroke-dasharray="4,4"/>
+                    <line x1="0" y1="${padTop + usableH * 0.95}" x2="${W}" y2="${padTop + usableH * 0.95}" stroke="var(--border-light)" stroke-width="0.5" stroke-dasharray="4,4"/>
+                    <text x="${W - 5}" y="${padTop + usableH * 0.05 - 2}" fill="var(--text-tertiary)" font-size="8" font-family="var(--font-mono)" text-anchor="end">${topLabel}</text>
+                    <text x="${W - 5}" y="${padTop + usableH * 0.5 - 2}" fill="var(--text-tertiary)" font-size="8" font-family="var(--font-mono)" text-anchor="end">${midLabel}</text>
+                    <text x="${W - 5}" y="${padTop + usableH * 0.95 - 2}" fill="var(--text-tertiary)" font-size="8" font-family="var(--font-mono)" text-anchor="end">${botLabel}</text>
+                    <path d="${areaPath}" fill="url(#dynGrad)" class="chart-area-animate"/>
+                    <polyline class="chart-line-animate" points="${points.join(' ')}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="${W}" cy="${lastY}" r="4" fill="${color}" opacity="0">
+                        <animate attributeName="opacity" from="0" to="1" begin="1s" dur="0.3s" fill="freeze"/>
+                    </circle>
+                    <circle cx="${W}" cy="${lastY}" r="8" fill="${color}" opacity="0">
+                        <animate attributeName="opacity" values="0;0.3;0" begin="1s" dur="2s" repeatCount="indefinite"/>
+                        <animate attributeName="r" values="4;12;4" begin="1s" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                </svg>`;
+
+            document.getElementById('chartCanvas').innerHTML = svg;
+
+            // Update header with period change
+            const change = lastPrice - firstPrice;
+            const changePct = ((change / firstPrice) * 100).toFixed(1);
+            const arrow = change >= 0 ? '▲' : '▼';
+            const changeEl = document.querySelector('.chart-current-change');
+            const priceEl = document.querySelector('.chart-current-price');
+            if (changeEl) {
+                changeEl.textContent = `${arrow} £${Math.abs(change).toFixed(2)} (${Math.abs(changePct)}%)`;
+                changeEl.style.color = change >= 0 ? 'var(--red)' : 'var(--green)';
+            }
+
+            // Update date range label
+            const dateLabel = document.querySelector('.chart-pub-type');
+            if (dateLabel && data.length > 1) {
+                const from = data[0].date;
+                const to = data[data.length - 1].date;
+                dateLabel.textContent = `ONS National Average · ${from} to ${to}`;
+            }
+        }
+
+        // ==========================================
+        // TAB BAR
+        // ==========================================
+        function initTabBar() {
+            document.querySelectorAll('.tab-item').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelector('.tab-item.active').classList.remove('active');
+                    tab.classList.add('active');
+                });
+            });
+        }
+
+        // ==========================================
+        // PRICE TICKER SIMULATION
+        // ==========================================
+        function initTickerSimulation() {
+            setInterval(() => {
+                const items = document.querySelectorAll('.ticker-price');
+                if (items.length === 0) return;
+                const idx = Math.floor(Math.random() * items.length);
+                const el = items[idx];
+                const current = parseFloat(el.textContent.replace('£', ''));
+                const delta = (Math.random() - 0.5) * 0.04;
+                const newPrice = (current + delta).toFixed(2);
+                el.textContent = `£${newPrice}`;
+                // Brief flash effect
+                el.style.color = delta > 0 ? 'var(--red)' : 'var(--green)';
+                setTimeout(() => { el.style.color = ''; }, 600);
+            }, 3000);
+        }
+    </script>
+
+</body>
+</html>
