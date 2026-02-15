@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-    <title>Pint Price Index — PPI</title>
+    <title>Pint Price Index — Live UK Beer Prices</title>
+    <meta name="description" content="Real-time pint prices from 700+ Wetherspoons pubs. Find the cheapest beer near you, compare regional prices, and explore the UK's most comprehensive pint price database.">
+    <meta property="og:title" content="Pint Price Index — Live UK Beer Prices">
+    <meta property="og:description" content="Real-time pint prices from 700+ Wetherspoons. The Bloomberg Terminal for beer.">
+    <meta property="og:type" content="website">
+    <meta name="theme-color" content="#0d1117">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -1291,6 +1296,541 @@
             100% { background-position: 200% center; }
         }
 
+        /* ==========================================
+           SPOONS EXPLORER
+        ========================================== */
+        .explorer {
+            padding: 0 20px 24px;
+        }
+
+        .explorer-search {
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .explorer-search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .explorer-search-icon svg {
+            width: 16px;
+            height: 16px;
+            stroke: var(--text-tertiary);
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .explorer-search input {
+            width: 100%;
+            padding: 12px 12px 12px 40px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .explorer-search input::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .explorer-search input:focus {
+            border-color: var(--green);
+        }
+
+        .explorer-sort {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 16px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .explorer-sort::-webkit-scrollbar { display: none; }
+
+        .explorer-sort-btn {
+            padding: 6px 12px;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .explorer-sort-btn.active {
+            background: var(--green-dim);
+            color: var(--green);
+            border-color: rgba(0, 212, 161, 0.3);
+        }
+
+        .explorer-stats {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .explorer-stat-pill {
+            padding: 6px 12px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-family: var(--font-mono);
+            font-size: 11px;
+            flex: 1;
+            text-align: center;
+        }
+
+        .explorer-stat-pill .val {
+            font-weight: 700;
+            color: var(--text-primary);
+            display: block;
+            font-size: 16px;
+            margin-bottom: 2px;
+        }
+
+        .explorer-stat-pill .lbl {
+            color: var(--text-tertiary);
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .explorer-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .explorer-pub {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .explorer-pub:active {
+            background: var(--bg-card-hover);
+        }
+
+        .explorer-pub-left {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .explorer-pub-rank {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            margin-bottom: 2px;
+        }
+
+        .explorer-pub-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .explorer-pub-location {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            margin-top: 2px;
+        }
+
+        .explorer-pub-right {
+            text-align: right;
+            flex-shrink: 0;
+            margin-left: 12px;
+        }
+
+        .explorer-pub-price {
+            font-family: var(--font-mono);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .explorer-pub-range {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--text-tertiary);
+            margin-top: 2px;
+        }
+
+        .explorer-pub-cheapest {
+            font-size: 11px;
+            color: var(--green);
+            font-weight: 500;
+            margin-top: 2px;
+        }
+
+        .explorer-more {
+            padding: 14px;
+            text-align: center;
+            font-family: var(--font-mono);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--green);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background 0.2s;
+        }
+
+        .explorer-more:active {
+            background: var(--bg-card-hover);
+        }
+
+        /* Expanded pub detail */
+        .explorer-pub-detail {
+            display: none;
+            padding: 0 16px 14px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 var(--radius-md) var(--radius-md);
+            margin-top: -9px;
+        }
+
+        .explorer-pub.expanded {
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
+        }
+
+        .explorer-pub.expanded + .explorer-pub-detail {
+            display: block;
+        }
+
+        .explorer-drink-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .explorer-drink-row:last-child {
+            border-bottom: none;
+        }
+
+        .explorer-drink-name {
+            font-size: 13px;
+            color: var(--text-secondary);
+            flex: 1;
+        }
+
+        .explorer-drink-abv {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--text-tertiary);
+            margin: 0 12px;
+        }
+
+        .explorer-drink-price {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* ==========================================
+           NEAREST PINT — GEOLOCATION HERO
+        ========================================== */
+        .nearest {
+            padding: 0 20px 24px;
+        }
+
+        .nearest-card {
+            background: linear-gradient(135deg, rgba(0, 212, 161, 0.08) 0%, var(--bg-card) 50%);
+            border: 1px solid rgba(0, 212, 161, 0.2);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nearest-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -30%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(0, 212, 161, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .nearest-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .nearest-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--green);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: var(--font-mono);
+        }
+
+        .nearest-gps {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nearest-gps .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            animation: pulse 2s ease infinite;
+        }
+
+        .nearest-pub {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .nearest-pub:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .nearest-pub-rank {
+            font-family: var(--font-mono);
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-tertiary);
+            width: 32px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .nearest-pub-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .nearest-pub-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .nearest-pub-detail {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            margin-top: 2px;
+        }
+
+        .nearest-pub-dist {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--green);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .nearest-pub-price {
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .nearest-pub-price .price {
+            font-family: var(--font-mono);
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--green);
+        }
+
+        .nearest-pub-price .beer {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            margin-top: 2px;
+        }
+
+        .nearest-enable {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .nearest-enable-btn {
+            padding: 12px 24px;
+            background: var(--green-dim);
+            border: 1px solid rgba(0, 212, 161, 0.3);
+            border-radius: var(--radius-md);
+            color: var(--green);
+            font-family: var(--font-mono);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nearest-enable-btn:active {
+            background: rgba(0, 212, 161, 0.2);
+        }
+
+        .nearest-enable-hint {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            margin-top: 8px;
+        }
+
+        /* ==========================================
+           PRICE DISTRIBUTION
+        ========================================== */
+        .distribution {
+            padding: 0 20px 24px;
+        }
+
+        .distribution-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+        }
+
+        .distribution-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 100px;
+            margin-bottom: 8px;
+        }
+
+        .distribution-bar {
+            flex: 1;
+            border-radius: 2px 2px 0 0;
+            min-height: 2px;
+            transition: height 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .distribution-bar:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: calc(100% + 4px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--text-primary);
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        .distribution-labels {
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--text-tertiary);
+        }
+
+        .distribution-median {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .distribution-median strong {
+            color: var(--text-primary);
+            font-family: var(--font-mono);
+        }
+
+        /* ==========================================
+           CHEAPEST BEER CALLOUT
+        ========================================== */
+        .cheapest-hero {
+            padding: 0 20px 24px;
+        }
+
+        .cheapest-hero-card {
+            background: linear-gradient(135deg, rgba(0, 212, 161, 0.06) 0%, rgba(74, 144, 255, 0.06) 100%);
+            border: 1px solid rgba(0, 212, 161, 0.15);
+            border-radius: var(--radius-lg);
+            padding: 24px 20px;
+            text-align: center;
+        }
+
+        .cheapest-hero-label {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--green);
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .cheapest-hero-price {
+            font-family: var(--font-mono);
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--green);
+            letter-spacing: -2px;
+            line-height: 1;
+        }
+
+        .cheapest-hero-beer {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-top: 8px;
+        }
+
+        .cheapest-hero-pub {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .cheapest-hero-sub {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            margin-top: 12px;
+            font-family: var(--font-mono);
+        }
+
         /* Candle animation */
         @keyframes candleGrow {
             from { transform: scaleY(0); }
@@ -1456,6 +1996,29 @@
             <button class="chart-time-btn">ALL</button>
         </div>
     </section>
+
+    <!-- CHEAPEST BEER IN THE UK RIGHT NOW -->
+    <div class="cheapest-hero fade-up" id="cheapestHero" style="display:none;">
+        <div class="cheapest-hero-card">
+            <div class="cheapest-hero-label">Cheapest pint in the UK right now</div>
+            <div class="cheapest-hero-price" id="cheapestHeroPrice">£—</div>
+            <div class="cheapest-hero-beer" id="cheapestHeroBeer">—</div>
+            <div class="cheapest-hero-pub" id="cheapestHeroPub">—</div>
+            <div class="cheapest-hero-sub" id="cheapestHeroSub">—</div>
+        </div>
+    </div>
+
+    <!-- FIND NEAREST CHEAP PINT -->
+    <div class="section-header fade-up" id="nearestHeader" style="display:none;">
+        <div class="section-title">Nearest Cheap Pint</div>
+        <div class="section-link" style="color: var(--green);">GPS</div>
+    </div>
+
+    <div class="nearest fade-up" id="nearestSection" style="display:none;">
+        <div class="nearest-card" id="nearestCard">
+            <!-- Populated by JS -->
+        </div>
+    </div>
 
     <!-- MARKET MOVERS -->
     <div class="section-header">
@@ -1946,47 +2509,115 @@
         </div>
     </div>
 
+    <!-- PRICE DISTRIBUTION -->
+    <div class="section-header fade-up" id="distHeader" style="display:none;">
+        <div class="section-title">Price Distribution</div>
+        <div class="section-link" id="distCount">—</div>
+    </div>
+
+    <div class="distribution fade-up" id="distSection" style="display:none;">
+        <div class="distribution-card">
+            <div class="distribution-bars" id="distBars"></div>
+            <div class="distribution-labels">
+                <span id="distMin">£—</span>
+                <span id="distMax">£—</span>
+            </div>
+            <div class="distribution-median" id="distMedian"></div>
+        </div>
+    </div>
+
+    <!-- SPOONS EXPLORER -->
+    <div class="section-header fade-up">
+        <div class="section-title">Spoons Explorer</div>
+        <div class="section-link" id="explorerCount">Loading...</div>
+    </div>
+
+    <div class="explorer fade-up" id="explorerSection">
+        <div class="explorer-stats" id="explorerStats">
+            <div class="explorer-stat-pill">
+                <span class="val" id="spoonsTotalPubs">---</span>
+                <span class="lbl">Pubs</span>
+            </div>
+            <div class="explorer-stat-pill">
+                <span class="val" id="spoonsAvgPint">---</span>
+                <span class="lbl">Avg Pint</span>
+            </div>
+            <div class="explorer-stat-pill">
+                <span class="val" id="spoonsCheapest">---</span>
+                <span class="lbl">Cheapest</span>
+            </div>
+        </div>
+
+        <div class="explorer-search">
+            <div class="explorer-search-icon">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+            </div>
+            <input type="text" id="explorerSearch" placeholder="Search pubs, towns, postcodes...">
+        </div>
+
+        <div class="explorer-sort" id="explorerSort">
+            <button class="explorer-sort-btn active" data-sort="cheapest">Cheapest first</button>
+            <button class="explorer-sort-btn" data-sort="expensive">Priciest first</button>
+            <button class="explorer-sort-btn" data-sort="name">A-Z</button>
+            <button class="explorer-sort-btn" data-sort="beers">Most beers</button>
+        </div>
+
+        <div class="explorer-list" id="explorerList">
+            <!-- Populated by JS -->
+        </div>
+
+        <div class="explorer-more" id="explorerMore" style="display:none;">
+            Show more pubs
+        </div>
+
+        <div style="font-size: 10px; color: var(--text-tertiary); margin-top: 12px; font-family: var(--font-mono); letter-spacing: 0.3px;" id="spoonsSource">
+            Source: Wetherspoons JDW Apps API · Live prices
+        </div>
+    </div>
+
     <!-- Spacer for bottom bar -->
     <div style="height: 32px;"></div>
 
     <!-- BOTTOM TAB BAR -->
     <nav class="tab-bar">
-        <div class="tab-item active">
+        <div class="tab-item active" data-scroll="top">
             <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
             <span>Markets</span>
         </div>
-        <div class="tab-item">
+        <div class="tab-item" data-scroll=".watchlist">
             <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             <span>Watchlist</span>
         </div>
-        <div class="tab-item">
+        <div class="tab-item" data-scroll=".alerts">
             <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
             <span>Alerts</span>
         </div>
-        <div class="tab-item">
+        <div class="tab-item" data-scroll="#explorerSection">
             <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            <span>Profile</span>
+            <span>Explorer</span>
         </div>
     </nav>
 
     <script>
         // ==========================================
-        // APP STATE — loaded from data.json
+        // APP STATE
         // ==========================================
-        let APP_DATA = null;
+        let APP_DATA = null;   // ONS national data
+        let SPOONS = null;     // Wetherspoons pub data
 
         // ==========================================
-        // LOADER
+        // LOADER — fetch both datasets
         // ==========================================
         window.addEventListener('load', async () => {
-            try {
-                const res = await fetch('data.json');
-                APP_DATA = await res.json();
-                initApp();
-            } catch (e) {
-                console.warn('data.json not found, using inline data');
-                initApp();
-            }
+            const [onsRes, spoonsRes] = await Promise.allSettled([
+                fetch('data.json').then(r => r.json()),
+                fetch('spoons.json').then(r => r.json())
+            ]);
+
+            if (onsRes.status === 'fulfilled') APP_DATA = onsRes.value;
+            if (spoonsRes.status === 'fulfilled') SPOONS = spoonsRes.value;
+
+            initApp();
             setTimeout(() => {
                 document.getElementById('loader').classList.add('hidden');
             }, 2200);
@@ -1996,17 +2627,35 @@
             updateTime();
             setInterval(updateTime, 30000);
             buildTicker();
-            initScrollReveal();
-            initCountUp();
             initChartFromData();
             initTabBar();
             initTickerSimulation();
 
-            // Show data freshness
-            if (APP_DATA && APP_DATA.lastUpdated) {
-                const badge = document.querySelector('.concept-badge');
-                if (badge) badge.textContent = `Data: ${APP_DATA.lastUpdated} · ONS CZMS`;
+            // Wetherspoons data
+            if (SPOONS) {
+                updatePortfolioFromSpoons();
+                buildRegionalFromSpoons();
+                buildMoversFromSpoons();
+                buildCheapestHero();
+                buildDistribution();
+                buildDynamicWatchlist();
+                buildDynamicAlerts();
+                initNearest();
+                initExplorer();
             }
+
+            // Show data freshness
+            const badge = document.querySelector('.concept-badge');
+            if (badge) {
+                const parts = [];
+                if (APP_DATA?.lastUpdated) parts.push(`ONS: ${APP_DATA.lastUpdated}`);
+                if (SPOONS?.meta?.fetchDate) parts.push(`Spoons: ${SPOONS.meta.fetchDate}`);
+                badge.textContent = parts.join(' · ') || 'Loading...';
+            }
+
+            // Scroll reveal AFTER all dynamic content is built
+            initScrollReveal();
+            initCountUp();
         }
 
         // ==========================================
@@ -2023,13 +2672,34 @@
         // LIVE TICKER — from data.json
         // ==========================================
         function buildTicker() {
-            const pubs = APP_DATA ? APP_DATA.sheffield.pubs : [];
-            const tickerData = pubs.map(p => ({
-                name: p.ticker,
-                price: p.price.toFixed(2),
-                change: (p.change >= 0 ? '+' : '') + p.change.toFixed(1) + '%',
-                dir: p.change >= 0 ? 'up' : 'down'
-            }));
+            let tickerData = [];
+
+            if (SPOONS && SPOONS.pubs && SPOONS.pubs.length) {
+                // Use real Wetherspoons data — sample ~20 diverse pubs
+                const pubs = SPOONS.pubs;
+                const step = Math.max(1, Math.floor(pubs.length / 20));
+                const sampled = [];
+                for (let i = 0; i < pubs.length && sampled.length < 20; i += step) {
+                    sampled.push(pubs[i]);
+                }
+                tickerData = sampled.map(p => {
+                    const diff = ((p.avg - SPOONS.meta.avgPint) / SPOONS.meta.avgPint * 100);
+                    return {
+                        name: p.name.replace(/^The /, '').substring(0, 20),
+                        price: p.avg.toFixed(2),
+                        change: (diff >= 0 ? '+' : '') + diff.toFixed(1) + '%',
+                        dir: diff >= 0 ? 'up' : 'down'
+                    };
+                });
+            } else if (APP_DATA) {
+                const pubs = APP_DATA.sheffield?.pubs || [];
+                tickerData = pubs.map(p => ({
+                    name: p.ticker,
+                    price: p.price.toFixed(2),
+                    change: (p.change >= 0 ? '+' : '') + p.change.toFixed(1) + '%',
+                    dir: p.change >= 0 ? 'up' : 'down'
+                }));
+            }
 
             const tickerEl = document.getElementById('ticker');
             const tickerHTML = [...tickerData, ...tickerData].map(t => `
@@ -2046,29 +2716,51 @@
         // SCROLL REVEAL
         // ==========================================
         function initScrollReveal() {
+            // Above-the-fold elements appear instantly (no transition)
+            const vh = window.innerHeight;
+            document.querySelectorAll('.fade-up').forEach(el => {
+                if (el.getBoundingClientRect().top < vh) {
+                    el.style.transition = 'none';
+                    el.classList.add('visible');
+                    // Re-enable transition for any future changes
+                    requestAnimationFrame(() => { el.style.transition = ''; });
+                }
+            });
+            // Below-fold elements get scroll-triggered reveal
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) entry.target.classList.add('visible');
                 });
             }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-            document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+            document.querySelectorAll('.fade-up:not(.visible)').forEach(el => observer.observe(el));
         }
 
         // ==========================================
         // COUNT UP ANIMATION
         // ==========================================
         function initCountUp() {
+            const vh = window.innerHeight;
+            document.querySelectorAll('.count-up').forEach(el => {
+                const target = parseFloat(el.dataset.target);
+                if (el.getBoundingClientRect().top < vh) {
+                    // Above the fold: show final value immediately
+                    const isInteger = el.dataset.format === 'integer';
+                    el.textContent = isInteger ? Math.round(target).toLocaleString('en-GB') : target.toFixed(2);
+                    el.dataset.counted = '1';
+                }
+            });
             const countObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    if (entry.isIntersecting) {
+                    if (entry.isIntersecting && !entry.target.dataset.counted) {
                         const el = entry.target;
                         const target = parseFloat(el.dataset.target);
                         animateCount(el, 0, target, 1500);
+                        el.dataset.counted = '1';
                         countObserver.unobserve(el);
                     }
                 });
             }, { threshold: 0.5 });
-            document.querySelectorAll('.count-up').forEach(el => countObserver.observe(el));
+            document.querySelectorAll('.count-up:not([data-counted])').forEach(el => countObserver.observe(el));
         }
 
         function animateCount(el, start, end, duration) {
@@ -2208,6 +2900,13 @@
                 tab.addEventListener('click', () => {
                     document.querySelector('.tab-item.active').classList.remove('active');
                     tab.classList.add('active');
+                    const target = tab.dataset.scroll;
+                    if (target === 'top') {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    } else {
+                        const el = document.querySelector(target);
+                        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
                 });
             });
         }
@@ -2225,10 +2924,583 @@
                 const delta = (Math.random() - 0.5) * 0.04;
                 const newPrice = (current + delta).toFixed(2);
                 el.textContent = `£${newPrice}`;
-                // Brief flash effect
                 el.style.color = delta > 0 ? 'var(--red)' : 'var(--green)';
                 setTimeout(() => { el.style.color = ''; }, 600);
             }, 3000);
+        }
+
+        // ==========================================
+        // SPOONS: UPDATE PORTFOLIO HEADER
+        // ==========================================
+        function updatePortfolioFromSpoons() {
+            const meta = SPOONS.meta;
+            // Update the portfolio label
+            const label = document.querySelector('.portfolio-label');
+            if (label) label.textContent = `Wetherspoons Pint Index — ${meta.totalPubs} pubs`;
+
+            // Update the main price
+            const countEl = document.querySelector('.portfolio-value .count-up');
+            if (countEl) countEl.dataset.target = meta.avgPint;
+
+            // Get ONS national avg from chart data
+            const onsAvg = APP_DATA?.national?.current;
+            const discount = onsAvg ? ((1 - meta.avgPint / onsAvg) * 100).toFixed(0) : null;
+
+            // Update stats: Cheapest | ONS National | Saving
+            const stats = document.querySelectorAll('.portfolio-stat-value');
+            const statLabels = document.querySelectorAll('.portfolio-stat-label');
+            if (stats[0]) { stats[0].textContent = `£${meta.cheapestPint.toFixed(2)}`; stats[0].className = 'portfolio-stat-value green'; }
+            if (statLabels[0]) statLabels[0].textContent = 'Cheapest';
+            if (stats[1] && onsAvg) { stats[1].textContent = `£${onsAvg.toFixed(2)}`; stats[1].className = 'portfolio-stat-value red'; }
+            if (statLabels[1] && onsAvg) statLabels[1].textContent = 'ONS National';
+            if (stats[2] && discount) { stats[2].textContent = `${discount}%`; stats[2].className = 'portfolio-stat-value green'; }
+            if (statLabels[2] && discount) statLabels[2].textContent = 'Spoons Saving';
+
+            // Update change line
+            const changeEl = document.querySelector('.portfolio-change');
+            if (changeEl) {
+                const saving = onsAvg ? `£${(onsAvg - meta.avgPint).toFixed(2)} cheaper than UK avg` : '';
+                changeEl.innerHTML = `<span class="positive">▼ ${saving}</span> <span class="label">· ${meta.totalPubs} pubs · ${meta.totalBeers.toLocaleString()} beers tracked</span>`;
+                changeEl.className = 'portfolio-change';
+            }
+        }
+
+        // ==========================================
+        // SPOONS: BUILD REGIONAL FROM REAL DATA
+        // ==========================================
+        function buildRegionalFromSpoons() {
+            const regional = SPOONS.regional;
+            if (!regional || !regional.length) return;
+
+            const card = document.querySelector('.regional-card');
+            if (!card) return;
+
+            const maxPrice = regional[0].avg;
+            const minPrice = regional[regional.length - 1].avg;
+
+            card.innerHTML = regional.slice(0, 10).map((r, i) => {
+                const pct = ((r.avg - minPrice) / (maxPrice - minPrice) * 60 + 40).toFixed(0);
+                const color = r.avg >= maxPrice * 0.9 ? 'var(--red)' :
+                              r.avg >= maxPrice * 0.75 ? 'var(--amber)' : 'var(--green)';
+                return `
+                    <div class="regional-row">
+                        <div class="regional-rank">${i + 1}</div>
+                        <div class="regional-name">${r.name} <span style="font-size:10px;color:var(--text-tertiary)">(${r.pubs})</span></div>
+                        <div class="regional-bar-wrap">
+                            <div class="regional-bar" style="width:${pct}%;background:${color};"></div>
+                        </div>
+                        <div class="regional-price">£${r.avg.toFixed(2)}</div>
+                    </div>`;
+            }).join('');
+
+            // Update source text
+            const source = card.parentElement.querySelector('div[style*="font-size: 10px"]');
+            if (source) source.textContent = `Source: Wetherspoons live prices · ${SPOONS.meta.fetchDate} · ${regional.length} regions`;
+        }
+
+        // ==========================================
+        // SPOONS: BUILD MARKET MOVERS
+        // ==========================================
+        function buildMoversFromSpoons() {
+            const container = document.getElementById('movers');
+            if (!container) return;
+
+            // Mix cheapest and priciest
+            const cheapest = (SPOONS.cheapest || []).slice(0, 3);
+            const priciest = (SPOONS.priciest || []).slice(0, 3);
+            const movers = [];
+
+            cheapest.forEach(p => movers.push({...p, type: 'drop'}));
+            priciest.forEach(p => movers.push({...p, type: 'rise'}));
+
+            container.innerHTML = movers.map(m => {
+                const price = m.type === 'drop' ? m.min || m.avg : m.max || m.avg;
+                const arrow = m.type === 'drop' ? '▼' : '▲';
+                const diffFromAvg = ((price - SPOONS.meta.avgPint) / SPOONS.meta.avgPint * 100).toFixed(1);
+                const sparkPoints = generateSparkline(m.type === 'drop');
+
+                return `
+                    <div class="mover-card ${m.type}">
+                        <div class="mover-pub">${m.name}</div>
+                        <div class="mover-type">${m.town} · Wetherspoons</div>
+                        <div class="mover-price">£${price.toFixed(2)}</div>
+                        <div class="mover-change ${m.type === 'drop' ? 'down' : 'up'}">${arrow} ${Math.abs(diffFromAvg)}% vs avg</div>
+                        <div class="mover-sparkline">
+                            <svg viewBox="0 0 120 32" preserveAspectRatio="none">
+                                <polyline points="${sparkPoints}" fill="none" stroke="${m.type === 'drop' ? 'var(--green)' : 'var(--red)'}" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                    </div>`;
+            }).join('');
+        }
+
+        function generateSparkline(downward) {
+            const pts = [];
+            let y = downward ? 5 : 28;
+            for (let i = 0; i < 9; i++) {
+                const x = (i / 8) * 120;
+                y += (downward ? 1 : -1) * (Math.random() * 4 + 1);
+                y = Math.max(2, Math.min(30, y));
+                pts.push(`${x.toFixed(0)},${y.toFixed(0)}`);
+            }
+            return pts.join(' ');
+        }
+
+        // ==========================================
+        // CHEAPEST BEER HERO
+        // ==========================================
+        function buildCheapestHero() {
+            const section = document.getElementById('cheapestHero');
+            if (!SPOONS?.pubs?.length) return;
+
+            // Find the absolute cheapest pint across all pubs
+            let cheapestPrice = Infinity, cheapestBeer = '', cheapestPub = '', cheapestTown = '';
+            for (const pub of SPOONS.pubs) {
+                for (const d of (pub.drinks || [])) {
+                    if (d.price < cheapestPrice && d.price > 0.5) { // Ignore sub-50p items
+                        cheapestPrice = d.price;
+                        cheapestBeer = d.name;
+                        cheapestPub = pub.name;
+                        cheapestTown = pub.town;
+                    }
+                }
+            }
+
+            if (cheapestPrice < Infinity) {
+                section.style.display = '';
+                document.getElementById('cheapestHeroPrice').textContent = `£${cheapestPrice.toFixed(2)}`;
+                document.getElementById('cheapestHeroBeer').textContent = cheapestBeer;
+                document.getElementById('cheapestHeroPub').textContent = `${cheapestPub}, ${cheapestTown}`;
+                const saving = SPOONS.meta.avgPint - cheapestPrice;
+                document.getElementById('cheapestHeroSub').textContent = `£${saving.toFixed(2)} cheaper than the Spoons average`;
+            }
+        }
+
+        // ==========================================
+        // GEOLOCATION — NEAREST CHEAP PINT
+        // ==========================================
+        let userLat = null, userLon = null;
+
+        function initNearest() {
+            if (!SPOONS?.pubs?.length) return;
+            const header = document.getElementById('nearestHeader');
+            const section = document.getElementById('nearestSection');
+            const card = document.getElementById('nearestCard');
+
+            header.style.display = '';
+            section.style.display = '';
+
+            // Show enable button initially
+            card.innerHTML = `
+                <div class="nearest-enable">
+                    <button class="nearest-enable-btn" onclick="requestLocation()">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:6px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        Find my nearest cheap pint
+                    </button>
+                    <div class="nearest-enable-hint">Uses your location to find nearby Wetherspoons</div>
+                </div>`;
+        }
+
+        function requestLocation() {
+            const card = document.getElementById('nearestCard');
+            card.innerHTML = '<div class="nearest-enable"><div class="nearest-enable-hint">Getting your location...</div></div>';
+
+            if (!navigator.geolocation) {
+                card.innerHTML = '<div class="nearest-enable"><div class="nearest-enable-hint">Geolocation not available in this browser</div></div>';
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    userLat = pos.coords.latitude;
+                    userLon = pos.coords.longitude;
+                    showNearestPubs();
+
+                    // Also add distance sort to explorer
+                    const sortContainer = document.getElementById('explorerSort');
+                    if (sortContainer && !document.querySelector('[data-sort="distance"]')) {
+                        const btn = document.createElement('button');
+                        btn.className = 'explorer-sort-btn';
+                        btn.dataset.sort = 'distance';
+                        btn.textContent = 'Nearest';
+                        btn.addEventListener('click', () => {
+                            document.querySelector('.explorer-sort-btn.active').classList.remove('active');
+                            btn.classList.add('active');
+                            explorerSort = 'distance';
+                            explorerVisible = 20;
+                            renderExplorer();
+                        });
+                        sortContainer.prepend(btn);
+                    }
+                },
+                (err) => {
+                    card.innerHTML = `<div class="nearest-enable"><div class="nearest-enable-hint">Location access denied. Enable in browser settings.</div></div>`;
+                },
+                { enableHighAccuracy: false, timeout: 10000 }
+            );
+        }
+
+        function haversineKm(lat1, lon1, lat2, lon2) {
+            const R = 6371;
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) * Math.sin(dLon/2)**2;
+            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        }
+
+        function showNearestPubs() {
+            if (!userLat || !SPOONS?.pubs) return;
+            const card = document.getElementById('nearestCard');
+
+            // Compute distances
+            const withDist = SPOONS.pubs
+                .filter(p => p.lat && p.lon)
+                .map(p => ({...p, dist: haversineKm(userLat, userLon, p.lat, p.lon)}))
+                .sort((a, b) => a.dist - b.dist)
+                .slice(0, 5);
+
+            card.innerHTML = `
+                <div class="nearest-header">
+                    <div class="nearest-title">Nearest to you</div>
+                    <div class="nearest-gps"><div class="dot"></div> Live</div>
+                </div>
+                ${withDist.map((p, i) => {
+                    const distStr = p.dist < 1 ? `${(p.dist * 1000).toFixed(0)}m` : `${p.dist.toFixed(1)}km`;
+                    return `
+                        <div class="nearest-pub">
+                            <div class="nearest-pub-rank">${i + 1}</div>
+                            <div class="nearest-pub-info">
+                                <div class="nearest-pub-name">${p.name}</div>
+                                <div class="nearest-pub-detail">${p.town} · ${p.postcode}</div>
+                                <div class="nearest-pub-dist">${distStr} away</div>
+                            </div>
+                            <div class="nearest-pub-price">
+                                <div class="price">£${p.min.toFixed(2)}</div>
+                                <div class="beer">${p.cheapest || 'cheapest'}</div>
+                            </div>
+                        </div>`;
+                }).join('')}`;
+        }
+
+        // ==========================================
+        // PRICE DISTRIBUTION HISTOGRAM
+        // ==========================================
+        function buildDistribution() {
+            if (!SPOONS?.pubs?.length) return;
+
+            document.getElementById('distHeader').style.display = '';
+            document.getElementById('distSection').style.display = '';
+
+            const prices = SPOONS.pubs.map(p => p.avg).filter(p => p > 0);
+            const minP = Math.floor(Math.min(...prices) * 10) / 10;
+            const maxP = Math.ceil(Math.max(...prices) * 10) / 10;
+
+            // Create bins (20 bins)
+            const numBins = 20;
+            const binWidth = (maxP - minP) / numBins;
+            const bins = new Array(numBins).fill(0);
+
+            for (const p of prices) {
+                const idx = Math.min(Math.floor((p - minP) / binWidth), numBins - 1);
+                bins[idx]++;
+            }
+
+            const maxBin = Math.max(...bins);
+            const barsEl = document.getElementById('distBars');
+
+            const onsAvg = APP_DATA?.national?.current;
+
+            // Position for ONS avg marker line
+            const onsPosition = onsAvg ? ((onsAvg - minP) / (maxP - minP) * 100) : null;
+
+            barsEl.innerHTML = bins.map((count, i) => {
+                const h = Math.max(2, (count / maxBin) * 100);
+                const price = (minP + i * binWidth).toFixed(2);
+                const priceEnd = (minP + (i + 1) * binWidth).toFixed(2);
+
+                // Color: green for cheap, amber for mid, red for expensive
+                const t = i / (numBins - 1);
+                const color = t < 0.4 ? 'var(--green)' : t < 0.7 ? 'var(--amber)' : 'var(--red)';
+
+                return `<div class="distribution-bar" style="height:${h}%;background:${color}" data-tooltip="£${price}–£${priceEnd}: ${count} pubs"></div>`;
+            }).join('') + (onsPosition !== null && onsPosition >= 0 && onsPosition <= 100 ?
+                `<div style="position:absolute;left:${onsPosition}%;top:0;bottom:0;width:2px;background:var(--red);opacity:0.8;z-index:5;"></div>
+                 <div style="position:absolute;left:${onsPosition}%;top:-18px;transform:translateX(-50%);font-size:10px;color:var(--red);font-family:var(--font-mono);white-space:nowrap;z-index:6;">ONS £${onsAvg.toFixed(2)}</div>` : '');
+            barsEl.style.position = 'relative';
+
+            document.getElementById('distMin').textContent = `£${minP.toFixed(2)}`;
+            document.getElementById('distMax').textContent = `£${maxP.toFixed(2)}`;
+
+            const sorted = [...prices].sort((a,b) => a-b);
+            const median = sorted[Math.floor(sorted.length / 2)];
+            const onsNote = onsAvg ? ` · ONS national avg: <strong style="color:var(--red)">£${onsAvg.toFixed(2)}</strong>` : '';
+            document.getElementById('distMedian').innerHTML = `Median Spoons pint: <strong>£${median.toFixed(2)}</strong>${onsNote}`;
+            document.getElementById('distCount').textContent = `${prices.length} pubs`;
+        }
+
+        // ==========================================
+        // DYNAMIC WATCHLIST FROM SPOONS DATA
+        // ==========================================
+        function buildDynamicWatchlist() {
+            const container = document.querySelector('.watchlist');
+            if (!container || !SPOONS?.pubs?.length) return;
+
+            // Pick interesting pubs: cheapest, priciest, and a few random mid-range
+            const sorted = [...SPOONS.pubs].sort((a,b) => a.avg - b.avg);
+            const picks = [
+                sorted[0],                                    // cheapest
+                sorted[1],                                    // 2nd cheapest
+                sorted[Math.floor(sorted.length / 2)],        // median
+                sorted[sorted.length - 2],                     // 2nd priciest
+                sorted[sorted.length - 1],                     // priciest
+            ].filter(Boolean);
+
+            const icons = [
+                { bg: 'var(--green-dim)', stroke: 'var(--green)' },
+                { bg: 'var(--green-dim)', stroke: 'var(--green)' },
+                { bg: 'var(--amber-dim)', stroke: 'var(--amber)' },
+                { bg: 'var(--red-dim)', stroke: 'var(--red)' },
+                { bg: 'var(--red-dim)', stroke: 'var(--red)' },
+            ];
+
+            container.innerHTML = picks.map((pub, i) => {
+                const icon = icons[i];
+                const diff = ((pub.avg - SPOONS.meta.avgPint) / SPOONS.meta.avgPint * 100);
+                const isUp = diff >= 0;
+                const changeClass = Math.abs(diff) < 3 ? 'flat' : (isUp ? 'up' : 'down');
+                const sparkPoints = generateSparkline(!isUp);
+
+                return `
+                    <div class="watchlist-item fade-up">
+                        <div class="watchlist-left">
+                            <div class="watchlist-icon" style="background:${icon.bg};">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="${icon.stroke}" stroke-width="2">
+                                    <path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/>
+                                    <path d="M6 1v3M10 1v3M14 1v3"/>
+                                </svg>
+                            </div>
+                            <div class="watchlist-info">
+                                <div class="watchlist-name">${pub.name}</div>
+                                <div class="watchlist-meta">${pub.town} · ${pub.cheapest || 'Wetherspoons'}</div>
+                            </div>
+                        </div>
+                        <div class="watchlist-center">
+                            <svg viewBox="0 0 64 32" preserveAspectRatio="none">
+                                <polyline points="${sparkPoints}" fill="none" stroke="${isUp ? 'var(--red)' : 'var(--green)'}" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="watchlist-right">
+                            <div class="watchlist-price">£${pub.avg.toFixed(2)}</div>
+                            <div class="watchlist-change ${changeClass}">${diff >= 0 ? '+' : ''}${diff.toFixed(1)}%</div>
+                        </div>
+                    </div>`;
+            }).join('');
+        }
+
+        // ==========================================
+        // DYNAMIC ALERTS FROM REAL DATA
+        // ==========================================
+        function buildDynamicAlerts() {
+            const container = document.querySelector('.alerts');
+            if (!container || !SPOONS) return;
+
+            const meta = SPOONS.meta;
+            const sorted = [...SPOONS.pubs].sort((a,b) => a.avg - b.avg);
+            const cheapest = sorted[0];
+            const priciest = sorted[sorted.length - 1];
+            const londonPubs = SPOONS.pubs.filter(p => {
+                const r = SPOONS.regional?.find(r => r.name === 'London');
+                return p.county && ['London','Camden','City of London','Westminster','Southwark','Islington','Lambeth','Wandsworth','Hackney','Tower Hamlets'].some(b => p.county.includes(b));
+            });
+            const londonAvg = londonPubs.length ? (londonPubs.reduce((s,p) => s + p.avg, 0) / londonPubs.length).toFixed(2) : null;
+
+            const alerts = [
+                {
+                    icon: 'drop',
+                    svg: '<polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/>',
+                    color: 'var(--green)',
+                    title: `${cheapest.name} — cheapest in the UK`,
+                    desc: `${cheapest.cheapest || 'Cheapest pint'} at £${cheapest.min.toFixed(2)} in ${cheapest.town}. Average pint £${cheapest.avg.toFixed(2)}.`,
+                    time: 'Live'
+                },
+                {
+                    icon: 'rise',
+                    svg: '<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>',
+                    color: 'var(--red)',
+                    title: `${priciest.name} — priciest Spoons`,
+                    desc: `Most expensive pint £${priciest.max.toFixed(2)} in ${priciest.town}. ${((priciest.avg / meta.avgPint - 1) * 100).toFixed(0)}% above national average.`,
+                    time: 'Live'
+                },
+                {
+                    icon: 'info',
+                    svg: '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>',
+                    color: 'var(--blue)',
+                    title: `${meta.totalPubs} pubs tracked · £${meta.avgPint.toFixed(2)} avg`,
+                    desc: `Prices range from £${meta.cheapestPint.toFixed(2)} to £${meta.mostExpensivePint.toFixed(2)}. ${londonAvg ? `London average: £${londonAvg}.` : ''}`,
+                    time: meta.fetchDate
+                }
+            ];
+
+            container.innerHTML = alerts.map(a => `
+                <div class="alert-card fade-up">
+                    <div class="alert-icon ${a.icon}">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${a.color}" stroke-width="2">${a.svg}</svg>
+                    </div>
+                    <div class="alert-content">
+                        <div class="alert-title">${a.title}</div>
+                        <div class="alert-desc">${a.desc}</div>
+                    </div>
+                    <div class="alert-time">${a.time}</div>
+                </div>
+            `).join('');
+        }
+
+        // ==========================================
+        // SPOONS EXPLORER
+        // ==========================================
+        let explorerPubs = [];
+        let explorerVisible = 20;
+        let explorerSort = 'cheapest';
+        let explorerQuery = '';
+
+        function initExplorer() {
+            explorerPubs = SPOONS.pubs || [];
+
+            // Stats
+            document.getElementById('spoonsTotalPubs').textContent = SPOONS.meta.totalPubs;
+            document.getElementById('spoonsAvgPint').textContent = `£${SPOONS.meta.avgPint.toFixed(2)}`;
+            document.getElementById('spoonsCheapest').textContent = `£${SPOONS.meta.cheapestPint.toFixed(2)}`;
+            document.getElementById('explorerCount').textContent = `${SPOONS.meta.totalPubs} pubs`;
+            document.getElementById('spoonsSource').textContent = `Source: Wetherspoons JDW Apps API · ${SPOONS.meta.fetchDate} · ${SPOONS.meta.totalBeers} beers tracked`;
+
+            // Search
+            const searchInput = document.getElementById('explorerSearch');
+            let debounce;
+            searchInput.addEventListener('input', () => {
+                clearTimeout(debounce);
+                debounce = setTimeout(() => {
+                    explorerQuery = searchInput.value.toLowerCase().trim();
+                    explorerVisible = 20;
+                    renderExplorer();
+                }, 200);
+            });
+
+            // Sort buttons
+            document.querySelectorAll('.explorer-sort-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelector('.explorer-sort-btn.active').classList.remove('active');
+                    btn.classList.add('active');
+                    explorerSort = btn.dataset.sort;
+                    explorerVisible = 20;
+                    renderExplorer();
+                });
+            });
+
+            // Show more
+            document.getElementById('explorerMore').addEventListener('click', () => {
+                explorerVisible += 20;
+                renderExplorer();
+            });
+
+            renderExplorer();
+        }
+
+        function renderExplorer() {
+            let filtered = explorerPubs;
+
+            // Filter by search
+            if (explorerQuery) {
+                filtered = filtered.filter(p =>
+                    p.name.toLowerCase().includes(explorerQuery) ||
+                    p.town.toLowerCase().includes(explorerQuery) ||
+                    (p.postcode && p.postcode.toLowerCase().includes(explorerQuery)) ||
+                    (p.cheapest && p.cheapest.toLowerCase().includes(explorerQuery))
+                );
+            }
+
+            // Sort
+            switch (explorerSort) {
+                case 'cheapest':
+                    filtered.sort((a, b) => a.avg - b.avg);
+                    break;
+                case 'expensive':
+                    filtered.sort((a, b) => b.avg - a.avg);
+                    break;
+                case 'name':
+                    filtered.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                case 'beers':
+                    filtered.sort((a, b) => b.beers - a.beers);
+                    break;
+                case 'distance':
+                    if (userLat && userLon) {
+                        filtered = filtered.filter(p => p.lat && p.lon);
+                        filtered.forEach(p => { p._dist = haversineKm(userLat, userLon, p.lat, p.lon); });
+                        filtered.sort((a, b) => a._dist - b._dist);
+                    }
+                    break;
+            }
+
+            const visible = filtered.slice(0, explorerVisible);
+            const list = document.getElementById('explorerList');
+
+            list.innerHTML = visible.map((pub, i) => {
+                const priceColor = pub.avg <= SPOONS.meta.avgPint * 0.85 ? 'var(--green)' :
+                                   pub.avg >= SPOONS.meta.avgPint * 1.15 ? 'var(--red)' : 'var(--text-primary)';
+                const rank = (explorerSort === 'cheapest' || explorerSort === 'expensive' || explorerSort === 'distance') ? i + 1 : null;
+                const distStr = pub._dist != null ? (pub._dist < 1 ? `${(pub._dist*1000).toFixed(0)}m` : `${pub._dist.toFixed(1)}km`) : null;
+                const onsAvg = APP_DATA?.national?.current;
+                const vsOns = onsAvg ? ((1 - pub.avg / onsAvg) * 100).toFixed(0) : null;
+
+                return `
+                    <div class="explorer-pub" onclick="togglePubDetail(this)">
+                        <div class="explorer-pub-left">
+                            ${rank ? `<div class="explorer-pub-rank">#${rank}</div>` : ''}
+                            <div class="explorer-pub-name">${pub.name}</div>
+                            <div class="explorer-pub-location">${pub.town}${pub.postcode ? ' · ' + pub.postcode : ''}${distStr ? ' · <span style="color:var(--green)">' + distStr + '</span>' : ''}</div>
+                        </div>
+                        <div class="explorer-pub-right">
+                            <div class="explorer-pub-price" style="color:${priceColor}">£${pub.avg.toFixed(2)}</div>
+                            <div class="explorer-pub-range">£${pub.min.toFixed(2)} – £${pub.max.toFixed(2)}</div>
+                            ${vsOns ? `<div class="explorer-pub-cheapest" style="color:${parseInt(vsOns) > 0 ? 'var(--green)' : 'var(--red)'}">${parseInt(vsOns) > 0 ? '▼' : '▲'} ${Math.abs(vsOns)}% vs ONS</div>` : (pub.cheapest ? `<div class="explorer-pub-cheapest">${pub.cheapest}</div>` : '')}
+                        </div>
+                    </div>
+                    <div class="explorer-pub-detail">
+                        <div class="explorer-drink-row" style="border-bottom:1px solid var(--border);padding-bottom:6px;margin-bottom:4px;">
+                            <div class="explorer-drink-name" style="color:var(--text-secondary);font-size:11px;">${pub.beers} beers · cheapest: ${pub.cheapest || '—'}</div>
+                            ${onsAvg ? `<div class="explorer-drink-price" style="color:var(--green);font-size:11px;">Save £${(onsAvg - pub.avg).toFixed(2)}/pint vs national</div>` : ''}
+                        </div>
+                        ${(pub.drinks || []).map(d => `
+                            <div class="explorer-drink-row">
+                                <div class="explorer-drink-name">${d.name}</div>
+                                ${d.abv ? `<div class="explorer-drink-abv">${d.abv}%</div>` : ''}
+                                <div class="explorer-drink-price">£${d.price.toFixed(2)}</div>
+                            </div>
+                        `).join('')}
+                    </div>`;
+            }).join('');
+
+            // Show more button
+            const moreBtn = document.getElementById('explorerMore');
+            if (filtered.length > explorerVisible) {
+                moreBtn.style.display = 'block';
+                moreBtn.textContent = `Show more (${explorerVisible}/${filtered.length})`;
+            } else {
+                moreBtn.style.display = 'none';
+            }
+
+            // Update count
+            if (explorerQuery) {
+                document.getElementById('explorerCount').textContent = `${filtered.length} found`;
+            }
+        }
+
+        function togglePubDetail(el) {
+            const wasExpanded = el.classList.contains('expanded');
+            // Close all
+            document.querySelectorAll('.explorer-pub.expanded').forEach(p => p.classList.remove('expanded'));
+            // Toggle this one
+            if (!wasExpanded) el.classList.add('expanded');
         }
     </script>
 
