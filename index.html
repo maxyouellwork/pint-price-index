@@ -1603,6 +1603,393 @@
         }
 
         /* ==========================================
+           PINT CALCULATOR
+        ========================================== */
+        .pint-calc {
+            padding: 0 20px 8px;
+        }
+
+        .pint-calc-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px 20px;
+        }
+
+        .pint-calc-prompt {
+            font-size: 16px;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .pint-calc-input-wrap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .pint-calc-input-wrap .currency-symbol {
+            font-family: var(--font-mono);
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .pint-calc-input {
+            font-family: var(--font-mono);
+            font-size: 32px;
+            font-weight: 700;
+            background: var(--bg-elevated);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            padding: 8px 16px;
+            width: 140px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .pint-calc-input:focus {
+            border-color: var(--amber);
+        }
+
+        .pint-calc-breakdown {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .pint-calc-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px dashed var(--border-light);
+        }
+
+        .pint-calc-row:last-child {
+            border-bottom: none;
+        }
+
+        .pint-calc-row-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .pint-calc-row-value {
+            font-family: var(--font-mono);
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .pint-calc-row.govt-row {
+            background: rgba(255, 71, 87, 0.06);
+            margin: 0 -12px;
+            padding: 10px 12px;
+            border-radius: var(--radius-sm);
+        }
+
+        .pint-calc-row.govt-row .pint-calc-row-label {
+            color: var(--red);
+            font-weight: 600;
+        }
+
+        .pint-calc-row.profit-row .pint-calc-row-value {
+            color: var(--green);
+        }
+
+        .pint-calc-total {
+            margin-top: 16px;
+            padding: 16px;
+            background: rgba(255, 71, 87, 0.08);
+            border: 1px solid rgba(255, 71, 87, 0.2);
+            border-radius: var(--radius-sm);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pint-calc-total-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .pint-calc-total-label span {
+            display: block;
+            font-size: 11px;
+            color: var(--text-tertiary);
+            margin-top: 2px;
+        }
+
+        .pint-calc-total-ratio {
+            font-family: var(--font-mono);
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--red);
+        }
+
+        .pint-calc-pints-needed {
+            margin-top: 12px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-tertiary);
+            line-height: 1.6;
+        }
+
+        .pint-calc-pints-needed strong {
+            color: var(--amber);
+            font-family: var(--font-mono);
+            font-size: 14px;
+        }
+
+        /* ==========================================
+           RECEIPT
+        ========================================== */
+        .receipt-section {
+            padding: 0 20px 8px;
+        }
+
+        .receipt {
+            background: #f5f0e8;
+            color: #1a1a1a;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 28px 24px;
+            border-radius: 4px;
+            max-width: 340px;
+            margin: 0 auto;
+            position: relative;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+        }
+
+        .receipt::before,
+        .receipt::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(135deg, transparent 33.33%, #f5f0e8 33.33%, #f5f0e8 66.67%, transparent 66.67%);
+            background-size: 12px 100%;
+        }
+
+        .receipt::before { top: -8px; }
+        .receipt::after { bottom: -8px; transform: rotate(180deg); }
+
+        .receipt-header {
+            text-align: center;
+            padding-bottom: 12px;
+            border-bottom: 2px dashed #999;
+            margin-bottom: 12px;
+        }
+
+        .receipt-pub-name {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .receipt-pub-sub {
+            font-size: 10px;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        .receipt-line {
+            display: flex;
+            justify-content: space-between;
+            padding: 3px 0;
+            font-size: 12px;
+        }
+
+        .receipt-line.indent {
+            padding-left: 16px;
+            font-size: 11px;
+            color: #555;
+        }
+
+        .receipt-line.govt-line {
+            color: #c0392b;
+            font-weight: 700;
+        }
+
+        .receipt-line.indent.govt-line {
+            font-weight: 400;
+        }
+
+        .receipt-dashed {
+            border-top: 1px dashed #999;
+            margin: 8px 0;
+        }
+
+        .receipt-double {
+            border-top: 2px solid #333;
+            margin: 8px 0;
+        }
+
+        .receipt-total-line {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 4px 0;
+        }
+
+        .receipt-total-line.govt {
+            color: #c0392b;
+        }
+
+        .receipt-total-line.profit {
+            color: #27ae60;
+        }
+
+        .receipt-footer {
+            text-align: center;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 2px dashed #999;
+            font-size: 11px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .receipt-footer strong {
+            display: block;
+            font-size: 12px;
+            color: #c0392b;
+            margin-top: 6px;
+        }
+
+        .receipt-barcode {
+            text-align: center;
+            margin-top: 14px;
+            font-size: 8px;
+            letter-spacing: 2px;
+            color: #999;
+        }
+
+        .receipt-barcode-bars {
+            display: flex;
+            justify-content: center;
+            gap: 1px;
+            margin-bottom: 4px;
+        }
+
+        .receipt-barcode-bars span {
+            display: inline-block;
+            width: 1px;
+            background: #333;
+        }
+
+        /* ==========================================
+           DECLINE TIMELINE
+        ========================================== */
+        .decline-timeline {
+            margin-top: 20px;
+            padding: 16px;
+            background: rgba(0,0,0,0.2);
+            border-radius: var(--radius-md);
+        }
+
+        .decline-timeline-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-tertiary);
+            margin-bottom: 12px;
+            font-family: var(--font-mono);
+        }
+
+        .decline-timeline svg {
+            width: 100%;
+            height: 180px;
+        }
+
+        .decline-timeline-events {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .timeline-event {
+            font-size: 9px;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-family: var(--font-mono);
+            letter-spacing: 0.3px;
+        }
+
+        .timeline-event.bad {
+            background: rgba(255, 71, 87, 0.15);
+            color: var(--red);
+            border: 1px solid rgba(255, 71, 87, 0.2);
+        }
+
+        .timeline-event.good {
+            background: rgba(46, 213, 115, 0.15);
+            color: var(--green);
+            border: 1px solid rgba(46, 213, 115, 0.2);
+        }
+
+        /* ==========================================
+           LIVE TAX COUNTER
+        ========================================== */
+        .live-counter {
+            position: fixed;
+            bottom: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(20, 12, 12, 0.95);
+            border: 1px solid rgba(255, 71, 87, 0.3);
+            border-radius: 20px;
+            padding: 8px 20px;
+            z-index: 900;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            transform: translateX(-50%) translateY(20px);
+            white-space: nowrap;
+        }
+
+        .live-counter.visible {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .live-counter-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--red);
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .live-counter-text {
+            font-size: 11px;
+            color: var(--text-tertiary);
+        }
+
+        .live-counter-value {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--red);
+        }
+
+        /* ==========================================
            GOVERNMENT'S CUT
         ========================================== */
         .govt-cut {
@@ -2935,8 +3322,53 @@
             <div class="statement-divider-sub">Every price above has a story behind it. Scroll to read it.</div>
         </div>
 
-    <!-- THE REAL COST — WHY YOUR LOCAL NEEDS £4.83 -->
+    <!-- PINT CALCULATOR -->
     <div class="section-header fade-up" id="storySection">
+        <div class="section-title">Tax Your Pint</div>
+        <div class="section-link">Interactive</div>
+    </div>
+
+    <div class="pint-calc fade-up">
+        <div class="pint-calc-card">
+            <div class="pint-calc-prompt">What did you pay for your last pint?</div>
+            <div class="pint-calc-input-wrap">
+                <span class="currency-symbol">£</span>
+                <input type="number" class="pint-calc-input" id="pintCalcInput" value="4.83" step="0.01" min="1" max="15">
+            </div>
+            <div class="pint-calc-breakdown" id="pintCalcBreakdown">
+                <div class="pint-calc-row govt-row">
+                    <span class="pint-calc-row-label">HM Treasury (duty, VAT, rates)</span>
+                    <span class="pint-calc-row-value" style="color: var(--red);" id="calcGovt">£1.61</span>
+                </div>
+                <div class="pint-calc-row">
+                    <span class="pint-calc-row-label">Brewery / supplier</span>
+                    <span class="pint-calc-row-value" style="color: var(--amber);" id="calcBrewery">£1.05</span>
+                </div>
+                <div class="pint-calc-row">
+                    <span class="pint-calc-row-label">Rent & overheads</span>
+                    <span class="pint-calc-row-value" style="color: var(--blue);" id="calcRent">£1.16</span>
+                </div>
+                <div class="pint-calc-row">
+                    <span class="pint-calc-row-label">Staff wages</span>
+                    <span class="pint-calc-row-value" style="color: var(--teal);" id="calcStaff">£0.86</span>
+                </div>
+                <div class="pint-calc-row profit-row">
+                    <span class="pint-calc-row-label">Your publican keeps</span>
+                    <span class="pint-calc-row-value" id="calcProfit">£0.12</span>
+                </div>
+            </div>
+            <div class="pint-calc-total">
+                <div class="pint-calc-total-label">Government : Publican<span>For every £1 the publican keeps</span></div>
+                <div class="pint-calc-total-ratio" id="calcRatio">13:1</div>
+            </div>
+            <div class="pint-calc-pints-needed" id="calcPintsNeeded">
+                At 12p profit per pint, your publican needs to sell <strong>344 pints per day</strong> to earn minimum wage (£12.21/hr, 60hr weeks).
+            </div>
+        </div>
+    </div>
+
+    <!-- THE REAL COST — WHY YOUR LOCAL NEEDS £4.83 -->
+    <div class="section-header fade-up">
         <div class="section-title">Why Your Local Needs £4.83</div>
         <div class="section-link">Where every penny goes</div>
     </div>
@@ -2980,6 +3412,83 @@
 
             <div class="narrative-cost-callout">
                 <p>The government takes <span>£1.61</span>. The publican keeps <span>12p</span>. That's a 13:1 ratio. The average publican earns £15,000/year — below the minimum wage they're legally required to pay their own staff.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- THE RECEIPT -->
+    <div class="section-header fade-up">
+        <div class="section-title">The Receipt</div>
+        <div class="section-link">Where it really goes</div>
+    </div>
+
+    <div class="receipt-section fade-up">
+        <div class="receipt">
+            <div class="receipt-header">
+                <div class="receipt-pub-name">THE KING'S HEAD</div>
+                <div class="receipt-pub-sub">Your Local Since 1847</div>
+            </div>
+
+            <div class="receipt-line">
+                <span>1x Pint, Bitter</span>
+                <span>£4.83</span>
+            </div>
+
+            <div class="receipt-dashed"></div>
+
+            <div class="receipt-line" style="font-weight:700;">
+                <span>OF WHICH:</span>
+                <span></span>
+            </div>
+
+            <div class="receipt-line indent govt-line">
+                <span>Beer duty</span>
+                <span>£0.35</span>
+            </div>
+            <div class="receipt-line indent govt-line">
+                <span>VAT (20%)</span>
+                <span>£0.81</span>
+            </div>
+            <div class="receipt-line indent govt-line">
+                <span>Business rates</span>
+                <span>£0.45</span>
+            </div>
+            <div class="receipt-line indent">
+                <span>Brewery / supplier</span>
+                <span>£1.05</span>
+            </div>
+            <div class="receipt-line indent">
+                <span>Rent & overheads</span>
+                <span>£1.16</span>
+            </div>
+            <div class="receipt-line indent">
+                <span>Staff wages</span>
+                <span>£0.89</span>
+            </div>
+
+            <div class="receipt-double"></div>
+
+            <div class="receipt-total-line govt">
+                <span>HM TREASURY</span>
+                <span>£1.61</span>
+            </div>
+            <div class="receipt-total-line profit">
+                <span>YOUR PUBLICAN</span>
+                <span>£0.12</span>
+            </div>
+
+            <div class="receipt-footer">
+                The government earns more
+                from your pint than the person
+                who poured it.
+                <strong>13x more.</strong>
+            </div>
+
+            <div class="receipt-barcode">
+                <div class="receipt-barcode-bars">
+                    <span style="height:18px"></span><span style="height:18px;width:2px"></span><span style="height:18px"></span><span style="height:18px"></span><span style="height:18px;width:2px"></span><span style="height:18px"></span><span style="height:18px;width:3px"></span><span style="height:18px"></span><span style="height:18px"></span><span style="height:18px;width:2px"></span><span style="height:18px"></span><span style="height:18px"></span><span style="height:18px;width:2px"></span><span style="height:18px;width:3px"></span><span style="height:18px"></span><span style="height:18px"></span><span style="height:18px;width:2px"></span><span style="height:18px"></span><span style="height:18px;width:2px"></span><span style="height:18px"></span><span style="height:18px"></span><span style="height:18px;width:3px"></span><span style="height:18px"></span><span style="height:18px;width:2px"></span><span style="height:18px"></span>
+                </div>
+                PONR-2025-15800-LOST
             </div>
         </div>
     </div>
@@ -3130,6 +3639,60 @@
             <div class="narrative-closures-quote">
                 The pubs closing are overwhelmingly small, independently owned locals. The chains are growing. The government is watching.
             </div>
+
+            <!-- DECLINE TIMELINE CHART -->
+            <div class="decline-timeline">
+                <div class="decline-timeline-label">25 years of decline</div>
+                <svg viewBox="0 0 600 180" preserveAspectRatio="none" id="declineTimeline">
+                    <!-- Filled area -->
+                    <defs>
+                        <linearGradient id="declineGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="rgba(255,71,87,0.25)"/>
+                            <stop offset="100%" stop-color="rgba(255,71,87,0)"/>
+                        </linearGradient>
+                    </defs>
+                    <!-- Grid lines -->
+                    <line x1="0" y1="20" x2="600" y2="20" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                    <line x1="0" y1="60" x2="600" y2="60" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                    <line x1="0" y1="100" x2="600" y2="100" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                    <line x1="0" y1="140" x2="600" y2="140" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                    <!-- Y axis labels -->
+                    <text x="4" y="16" fill="rgba(255,255,255,0.3)" font-size="9" font-family="monospace">60k</text>
+                    <text x="4" y="60" fill="rgba(255,255,255,0.3)" font-size="9" font-family="monospace">55k</text>
+                    <text x="4" y="100" fill="rgba(255,255,255,0.3)" font-size="9" font-family="monospace">50k</text>
+                    <text x="4" y="140" fill="rgba(255,255,255,0.3)" font-size="9" font-family="monospace">45k</text>
+                    <!-- Area fill -->
+                    <path d="M0,20 L25,22 L75,30 L125,38 L175,50 L200,56 L250,72 L300,80 L350,88 L400,104 L450,108 L500,120 L550,128 L600,140 L600,180 L0,180 Z" fill="url(#declineGrad)"/>
+                    <!-- Main line: 2000-2024 -->
+                    <polyline points="0,20 25,22 75,30 125,38 175,50 200,56 250,72 300,80 350,88 400,104 450,108 500,120 550,128 600,140" fill="none" stroke="var(--red)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <!-- Event markers -->
+                    <!-- 2008: Beer duty escalator -->
+                    <line x1="200" y1="50" x2="200" y2="170" stroke="rgba(255,71,87,0.4)" stroke-width="1" stroke-dasharray="3,3"/>
+                    <text x="202" y="168" fill="rgba(255,71,87,0.6)" font-size="7" font-family="monospace">2008</text>
+                    <!-- 2013: Escalator scrapped -->
+                    <line x1="325" y1="84" x2="325" y2="170" stroke="rgba(46,213,115,0.4)" stroke-width="1" stroke-dasharray="3,3"/>
+                    <text x="327" y="168" fill="rgba(46,213,115,0.6)" font-size="7" font-family="monospace">2013</text>
+                    <!-- 2020: COVID -->
+                    <line x1="500" y1="120" x2="500" y2="170" stroke="rgba(255,71,87,0.4)" stroke-width="1" stroke-dasharray="3,3"/>
+                    <text x="502" y="168" fill="rgba(255,71,87,0.6)" font-size="7" font-family="monospace">2020</text>
+                    <!-- 2025: Tax hikes -->
+                    <circle cx="600" cy="140" r="4" fill="var(--red)" stroke="var(--bg-primary)" stroke-width="2"/>
+                    <!-- Data points -->
+                    <circle cx="0" cy="20" r="3" fill="var(--text-primary)"/>
+                    <text x="4" y="14" fill="var(--text-primary)" font-size="8" font-family="monospace" font-weight="700">60,800</text>
+                    <text x="560" y="154" fill="var(--red)" font-size="8" font-family="monospace" font-weight="700">45,000</text>
+                    <!-- X axis labels -->
+                    <text x="0" y="178" fill="rgba(255,255,255,0.3)" font-size="8" font-family="monospace">2000</text>
+                    <text x="570" y="178" fill="rgba(255,255,255,0.3)" font-size="8" font-family="monospace">2024</text>
+                </svg>
+                <div class="decline-timeline-events">
+                    <div class="timeline-event bad">2008 Beer duty escalator (+42% over 5 years)</div>
+                    <div class="timeline-event good">2013 Escalator scrapped</div>
+                    <div class="timeline-event bad">2020 COVID lockdowns</div>
+                    <div class="timeline-event bad">2025 NI hike + rates relief cut</div>
+                </div>
+            </div>
+
             <div style="font-size: 10px; color: var(--text-tertiary); margin-top: 16px; font-family: var(--font-mono); letter-spacing: 0.3px;">Source: BBPA · ONS · CGA / AlixPartners Hospitality Market Monitor · CAMRA 2025</div>
         </div>
     </div>
@@ -3228,6 +3791,13 @@
     </div>
 
     </div><!-- end .statement-zone -->
+
+    <!-- LIVE TAX COUNTER (floating) -->
+    <div class="live-counter" id="liveCounter">
+        <div class="live-counter-dot"></div>
+        <span class="live-counter-text">Treasury revenue since you opened this page:</span>
+        <span class="live-counter-value" id="liveCounterValue">£0</span>
+    </div>
 
     <!-- PRICE DISTRIBUTION -->
     <div class="section-header fade-up" id="distHeader" style="display:none;">
@@ -4227,6 +4797,91 @@
             // Toggle this one
             if (!wasExpanded) el.classList.add('expanded');
         }
+
+        // ==========================================
+        // PINT CALCULATOR
+        // ==========================================
+        (function initPintCalc() {
+            const input = document.getElementById('pintCalcInput');
+            if (!input) return;
+
+            function updateCalc() {
+                const price = parseFloat(input.value) || 4.83;
+                // Proportions based on BBPA data for a £4.83 pint
+                const govtPct = 0.3334;   // 33.34% (duty + VAT + rates)
+                const breweryPct = 0.2174; // 21.74%
+                const rentPct = 0.2402;    // 24.02%
+                const staffPct = 0.1780;   // 17.80%
+                const profitPct = 0.0248;  // 2.48% (~12p on £4.83)
+
+                const govt = price * govtPct;
+                const brewery = price * breweryPct;
+                const rent = price * rentPct;
+                const staff = price * staffPct;
+                const profit = price * profitPct;
+                const ratio = Math.round(govt / profit);
+
+                document.getElementById('calcGovt').textContent = `£${govt.toFixed(2)}`;
+                document.getElementById('calcBrewery').textContent = `£${brewery.toFixed(2)}`;
+                document.getElementById('calcRent').textContent = `£${rent.toFixed(2)}`;
+                document.getElementById('calcStaff').textContent = `£${staff.toFixed(2)}`;
+                document.getElementById('calcProfit').textContent = `£${profit.toFixed(2)}`;
+                document.getElementById('calcRatio').textContent = `${ratio}:1`;
+
+                // Pints needed for minimum wage (£12.21/hr × 60hrs/week = £732.60/week)
+                const weeklyWage = 12.21 * 60;
+                const pintsPerWeek = Math.ceil(weeklyWage / profit);
+                const pintsPerDay = Math.ceil(pintsPerWeek / 7);
+                document.getElementById('calcPintsNeeded').innerHTML =
+                    `At ${profit.toFixed(0)}p profit per pint, your publican needs to sell <strong>${pintsPerDay.toLocaleString()} pints per day</strong> to earn minimum wage (£12.21/hr, 60hr weeks).`;
+            }
+
+            input.addEventListener('input', updateCalc);
+            updateCalc();
+        })();
+
+        // ==========================================
+        // LIVE GOVERNMENT REVENUE COUNTER
+        // ==========================================
+        (function initLiveCounter() {
+            const counter = document.getElementById('liveCounter');
+            const valueEl = document.getElementById('liveCounterValue');
+            const stmtZone = document.querySelector('.statement-zone');
+            if (!counter || !valueEl || !stmtZone) return;
+
+            // UK sells ~7.2B pints/year. Govt takes ~£1.61/pint.
+            // = £11.592B/year = £367.56/second
+            const perSecond = 367.56;
+            const pageLoadTime = Date.now();
+            let animFrame;
+
+            function updateCounter() {
+                const elapsed = (Date.now() - pageLoadTime) / 1000;
+                const total = elapsed * perSecond;
+                if (total < 1000) {
+                    valueEl.textContent = `£${Math.floor(total).toLocaleString()}`;
+                } else if (total < 1000000) {
+                    valueEl.textContent = `£${(total / 1000).toFixed(1)}k`;
+                } else {
+                    valueEl.textContent = `£${(total / 1000000).toFixed(2)}m`;
+                }
+                animFrame = requestAnimationFrame(updateCounter);
+            }
+
+            // Show/hide based on statement zone visibility
+            const obs = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        counter.classList.add('visible');
+                        if (!animFrame) updateCounter();
+                    } else {
+                        counter.classList.remove('visible');
+                        if (animFrame) { cancelAnimationFrame(animFrame); animFrame = null; }
+                    }
+                });
+            }, { threshold: 0.05 });
+            obs.observe(stmtZone);
+        })();
     </script>
 
 </body>
