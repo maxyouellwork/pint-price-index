@@ -11,6 +11,7 @@
     <meta name="theme-color" content="#0d1117">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
     <style>
         /* ==========================================
            RESET & BASE
@@ -1883,6 +1884,90 @@
         }
 
         /* ==========================================
+           SHARE BUTTONS
+        ========================================== */
+        .share-bar {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px 20px 8px;
+        }
+
+        .share-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 18px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .share-btn:active {
+            transform: scale(0.96);
+        }
+
+        .share-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        .share-btn.share-x {
+            border-color: rgba(255,255,255,0.15);
+        }
+
+        .share-btn.share-x:hover {
+            background: #1a1a1a;
+            color: var(--text-primary);
+        }
+
+        .share-btn.share-save {
+            border-color: rgba(46, 213, 115, 0.3);
+            color: var(--green);
+        }
+
+        .share-btn.share-save:hover {
+            background: rgba(46, 213, 115, 0.1);
+        }
+
+        .share-btn.share-copy {
+            border-color: rgba(69, 170, 242, 0.3);
+            color: var(--blue);
+        }
+
+        .share-btn.share-copy:hover {
+            background: rgba(69, 170, 242, 0.1);
+        }
+
+        .share-btn.share-fb {
+            border-color: rgba(66, 103, 178, 0.3);
+            color: #4267B2;
+        }
+
+        .share-btn.share-fb:hover {
+            background: rgba(66, 103, 178, 0.1);
+        }
+
+        .share-btn .tick {
+            display: none;
+        }
+
+        .share-btn.copied .tick {
+            display: inline;
+        }
+
+        .share-btn.copied .copy-icon {
+            display: none;
+        }
+
+        /* ==========================================
            DECLINE TIMELINE
         ========================================== */
         .decline-timeline {
@@ -3493,6 +3578,26 @@
         </div>
     </div>
 
+    <div class="share-bar fade-up">
+        <button class="share-btn share-save" onclick="shareReceipt()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Save receipt
+        </button>
+        <button class="share-btn share-x" onclick="shareToX()">
+            <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            Post
+        </button>
+        <button class="share-btn share-fb" onclick="shareToFacebook()">
+            <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            Share
+        </button>
+        <button class="share-btn share-copy" onclick="copyLink()">
+            <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            <span class="tick">Copied</span>
+            <span class="copy-icon">Copy link</span>
+        </button>
+    </div>
+
     <!-- WHY SPOONS CAN UNDERCUT -->
     <div class="section-header fade-up">
         <div class="section-title">Why Spoons Can Do It for Less</div>
@@ -4884,6 +4989,83 @@
             }, { threshold: 0.05 });
             obs.observe(stmtZone);
         })();
+
+        // ==========================================
+        // SHARING
+        // ==========================================
+        const SHARE_URL = 'https://projects.maxyouell.co.uk/pint-price-index/';
+        const SHARE_TEXT = 'The government takes £1.61 from every pint. The publican keeps 12p. That\'s 13x more.\n\n15,800 pubs lost since 2000. One closing every day.\n\n';
+
+        async function shareReceipt() {
+            const receipt = document.querySelector('.receipt');
+            if (!receipt || typeof html2canvas === 'undefined') return;
+
+            const btn = event.currentTarget;
+            const origText = btn.innerHTML;
+            btn.innerHTML = '<span>Saving...</span>';
+
+            try {
+                const canvas = await html2canvas(receipt, {
+                    backgroundColor: '#f5f0e8',
+                    scale: 3,
+                    useCORS: true,
+                    logging: false
+                });
+
+                // Try Web Share API first (mobile)
+                if (navigator.share && navigator.canShare) {
+                    canvas.toBlob(async (blob) => {
+                        const file = new File([blob], 'pint-receipt.png', { type: 'image/png' });
+                        const shareData = {
+                            title: 'Pint of No Return — The Receipt',
+                            text: SHARE_TEXT,
+                            url: SHARE_URL,
+                            files: [file]
+                        };
+                        if (navigator.canShare(shareData)) {
+                            try {
+                                await navigator.share(shareData);
+                                btn.innerHTML = origText;
+                                return;
+                            } catch (e) { /* user cancelled or error, fall through to download */ }
+                        }
+                        downloadCanvas(canvas);
+                        btn.innerHTML = origText;
+                    }, 'image/png');
+                } else {
+                    downloadCanvas(canvas);
+                    btn.innerHTML = origText;
+                }
+            } catch (e) {
+                console.error('Receipt capture failed:', e);
+                btn.innerHTML = origText;
+            }
+        }
+
+        function downloadCanvas(canvas) {
+            const link = document.createElement('a');
+            link.download = 'pint-of-no-return-receipt.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        function shareToX() {
+            const text = encodeURIComponent(SHARE_TEXT + SHARE_URL);
+            window.open(`https://x.com/intent/tweet?text=${text}`, '_blank', 'width=550,height=420');
+        }
+
+        function shareToFacebook() {
+            const url = encodeURIComponent(SHARE_URL);
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank', 'width=550,height=420');
+        }
+
+        function copyLink() {
+            navigator.clipboard.writeText(SHARE_URL).then(() => {
+                const btn = event.currentTarget;
+                btn.classList.add('copied');
+                setTimeout(() => btn.classList.remove('copied'), 2000);
+            });
+        }
     </script>
 
 </body>
