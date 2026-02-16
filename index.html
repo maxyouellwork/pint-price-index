@@ -4832,8 +4832,10 @@
                 const weeklyWage = 12.21 * 60;
                 const pintsPerWeek = Math.ceil(weeklyWage / profit);
                 const pintsPerDay = Math.ceil(pintsPerWeek / 7);
-                document.getElementById('calcPintsNeeded').innerHTML =
-                    `At ${profit.toFixed(0)}p profit per pint, your publican needs to sell <strong>${pintsPerDay.toLocaleString()} pints per day</strong> to earn minimum wage (£12.21/hr, 60hr weeks).`;
+                const profitPence = Math.round(profit * 100);
+                document.getElementById('calcPintsNeeded').innerHTML = profitPence > 0
+                    ? `At ${profitPence}p profit per pint, your publican needs to sell <strong>${pintsPerDay.toLocaleString()} pints per day</strong> to earn minimum wage (£12.21/hr, 60hr weeks).`
+                    : `At this price, the publican makes <strong>nothing</strong>.`;
             }
 
             input.addEventListener('input', updateCalc);
