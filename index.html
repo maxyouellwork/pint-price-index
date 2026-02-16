@@ -3516,7 +3516,7 @@
 
             <div class="receipt-line">
                 <span>1x Pint, Bitter</span>
-                <span>£4.83</span>
+                <span id="rcptTotal">£4.83</span>
             </div>
 
             <div class="receipt-dashed"></div>
@@ -3528,45 +3528,45 @@
 
             <div class="receipt-line indent govt-line">
                 <span>Beer duty</span>
-                <span>£0.35</span>
+                <span id="rcptDuty">£0.35</span>
             </div>
             <div class="receipt-line indent govt-line">
                 <span>VAT (20%)</span>
-                <span>£0.81</span>
+                <span id="rcptVat">£0.81</span>
             </div>
             <div class="receipt-line indent govt-line">
                 <span>Business rates</span>
-                <span>£0.45</span>
+                <span id="rcptRates">£0.45</span>
             </div>
             <div class="receipt-line indent">
                 <span>Brewery / supplier</span>
-                <span>£1.05</span>
+                <span id="rcptBrewery">£1.05</span>
             </div>
             <div class="receipt-line indent">
                 <span>Rent & overheads</span>
-                <span>£1.16</span>
+                <span id="rcptRent">£1.16</span>
             </div>
             <div class="receipt-line indent">
                 <span>Staff wages</span>
-                <span>£0.89</span>
+                <span id="rcptStaff">£0.89</span>
             </div>
 
             <div class="receipt-double"></div>
 
             <div class="receipt-total-line govt">
                 <span>HM TREASURY</span>
-                <span>£1.61</span>
+                <span id="rcptGovtTotal">£1.61</span>
             </div>
             <div class="receipt-total-line profit">
                 <span>YOUR PUBLICAN</span>
-                <span>£0.12</span>
+                <span id="rcptProfit">£0.12</span>
             </div>
 
             <div class="receipt-footer">
                 The government earns more
                 from your pint than the person
                 who poured it.
-                <strong>13x more.</strong>
+                <strong id="rcptRatio">13x more.</strong>
             </div>
 
             <div class="receipt-barcode">
@@ -4941,6 +4941,26 @@
                 document.getElementById('calcPintsNeeded').innerHTML = profitPence > 0
                     ? `At ${profitPence}p profit per pint, your publican needs to sell <strong>${pintsPerDay.toLocaleString()} pints per day</strong> to earn minimum wage (£12.21/hr, 60hr weeks).`
                     : `At this price, the publican makes <strong>nothing</strong>.`;
+
+                // Update the receipt too
+                // Tax breakdown: duty ~7.2%, VAT ~16.7% (VAT = price/6), rates ~9.3%
+                const vat = price / 6;           // VAT at 20% = price/6
+                const duty = price * 0.0725;     // beer duty ~7.25%
+                const rates = govt - vat - duty;  // remainder of govt take = rates
+                const rcptStaff = staff + profit; // receipt lumps profit separately
+
+                const s = (v) => `£${v.toFixed(2)}`;
+                const el = (id) => document.getElementById(id);
+                if (el('rcptTotal'))     el('rcptTotal').textContent = s(price);
+                if (el('rcptDuty'))      el('rcptDuty').textContent = s(duty);
+                if (el('rcptVat'))       el('rcptVat').textContent = s(vat);
+                if (el('rcptRates'))     el('rcptRates').textContent = s(Math.max(0, rates));
+                if (el('rcptBrewery'))   el('rcptBrewery').textContent = s(brewery);
+                if (el('rcptRent'))      el('rcptRent').textContent = s(rent);
+                if (el('rcptStaff'))     el('rcptStaff').textContent = s(staff);
+                if (el('rcptGovtTotal')) el('rcptGovtTotal').textContent = s(govt);
+                if (el('rcptProfit'))    el('rcptProfit').textContent = s(profit);
+                if (el('rcptRatio'))     el('rcptRatio').textContent = `${ratio}x more.`;
             }
 
             input.addEventListener('input', updateCalc);
