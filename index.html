@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-    <title>Pint of No Return — The Price Gap Killing Your Local</title>
-    <meta name="description" content="15,800 pubs lost since 2000. Spoons sells pints at £3.22 while your local needs £4.83 to survive. Explore the data behind Britain's pub crisis.">
-    <meta property="og:title" content="Pint of No Return — The Price Gap Killing Your Local">
-    <meta property="og:description" content="15,800 pubs lost. £3.22 vs £4.83. The gap your local can't close. Explore live prices from 778 Wetherspoons pubs.">
+    <title>Pint of No Return — How the Government is Killing Your Local</title>
+    <meta name="description" content="33p of every £1 you spend on a pint goes to the Treasury. They just hiked taxes again. 15,800 pubs lost since 2000. Explore the data.">
+    <meta property="og:title" content="Pint of No Return — How the Government is Killing Your Local">
+    <meta property="og:description" content="33p of every £1 goes to the Treasury. They just hiked NI, slashed rates relief, and wonder why pubs are closing. The data doesn't lie.">
     <meta property="og:type" content="website">
     <meta name="theme-color" content="#0d1117">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1438,6 +1438,152 @@
         }
 
         /* ==========================================
+           GOVERNMENT'S CUT
+        ========================================== */
+        .govt-cut {
+            padding: 0 20px 8px;
+        }
+
+        .govt-cut-card {
+            background: linear-gradient(135deg, #1a0a0a 0%, var(--bg-card) 40%);
+            border: 1px solid rgba(255, 71, 87, 0.3);
+            border-radius: var(--radius-lg);
+            padding: 24px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .govt-cut-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--red), var(--amber), var(--red));
+        }
+
+        .govt-cut-headline {
+            font-family: var(--font-mono);
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--red);
+            text-align: center;
+            margin-bottom: 4px;
+        }
+
+        .govt-cut-subhead {
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .govt-cut-subhead span {
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        .govt-hit-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .govt-hit {
+            background: rgba(255, 71, 87, 0.06);
+            border: 1px solid rgba(255, 71, 87, 0.15);
+            border-radius: var(--radius-sm);
+            padding: 14px 12px;
+        }
+
+        .govt-hit-label {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--red);
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .govt-hit-value {
+            font-family: var(--font-mono);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .govt-hit-desc {
+            font-size: 10px;
+            color: var(--text-tertiary);
+            line-height: 1.4;
+        }
+
+        .govt-hit-full {
+            grid-column: 1 / -1;
+        }
+
+        .govt-vat-compare {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 16px 0;
+            padding: 16px;
+            background: rgba(0,0,0,0.3);
+            border-radius: var(--radius-md);
+        }
+
+        .govt-vat-item {
+            flex: 1;
+            text-align: center;
+        }
+
+        .govt-vat-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-tertiary);
+            margin-bottom: 6px;
+        }
+
+        .govt-vat-value {
+            font-family: var(--font-mono);
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .govt-vat-divider {
+            width: 1px;
+            height: 40px;
+            background: var(--border);
+        }
+
+        .govt-cut-callout {
+            background: rgba(255, 71, 87, 0.08);
+            border: 1px solid rgba(255, 71, 87, 0.2);
+            border-left: 3px solid var(--red);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        .govt-cut-callout p {
+            font-size: 14px;
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .govt-cut-callout span {
+            color: var(--red);
+            font-weight: 700;
+            font-family: var(--font-mono);
+        }
+
+        /* ==========================================
            COMMUNITY IMPACT
         ========================================== */
         .community-impact {
@@ -2136,7 +2282,7 @@
     <div class="loader" id="loader">
         <div class="loader-logo">PONR<span>.pub</span></div>
         <div class="loader-bar"><div class="loader-bar-fill"></div></div>
-        <div class="loader-text">LOADING 778 PUB PRICES...</div>
+        <div class="loader-text">LOADING 778 PUBS THE GOVERNMENT IS TAXING TO DEATH...</div>
     </div>
 
     <!-- CONCEPT BADGE -->
@@ -2303,7 +2449,7 @@
             </div>
         </div>
         <div class="gap-callout">
-            <p>An independent pub needs to charge <span>£4.00–£4.50</span> just to break even. Spoons can do it for £2.85 because of scale. That gap is why <span>15,800 pubs</span> have closed since 2000.</p>
+            <p>An independent needs <span>£4.00–£4.50</span> just to break even — <span>33%</span> of that goes straight to the government. Then in April 2025, they hiked NI, slashed rates relief, and raised the minimum wage. <span>15,800 pubs</span> have closed since 2000. The government just made it harder to keep the rest open.</p>
         </div>
         <div style="font-size: 10px; color: var(--text-tertiary); margin-top: 12px; font-family: var(--font-mono); letter-spacing: 0.3px;">Source: BBPA / ONS / Wetherspoons JDW Apps API</div>
     </div>
@@ -2623,7 +2769,7 @@
     <div class="narrative-cost fade-up">
         <div class="narrative-cost-card">
             <div class="narrative-cost-intro">
-                This is where every penny of an average pint at your local goes. A third goes straight to the government. The pub keeps <strong>12p</strong>.
+                This is where every penny of your pint goes. The government takes <strong>£1.61</strong> — a third of the glass. The publican who pulled it keeps <strong>12p</strong>.
             </div>
 
             <div class="narrative-bar-track" id="narrativeCostBar">
@@ -2658,7 +2804,7 @@
             </div>
 
             <div class="narrative-cost-callout">
-                <p>The average publican earns <span>£15,000/year</span> — below minimum wage — working 60+ hour weeks. Down from 84p profit per pint in 2009.</p>
+                <p>The government takes <span>£1.61</span>. The publican keeps <span>12p</span>. That's a 13:1 ratio. The average publican earns £15,000/year — below the minimum wage they're legally required to pay their own staff.</p>
             </div>
         </div>
     </div>
@@ -2706,6 +2852,64 @@
         </div>
     </div>
 
+    <!-- THE GOVERNMENT'S CUT -->
+    <div class="section-header fade-up">
+        <div class="section-title">The Government's Cut</div>
+        <div class="section-link" style="color: var(--red);">April 2025</div>
+    </div>
+
+    <div class="govt-cut fade-up">
+        <div class="govt-cut-card">
+            <div class="govt-cut-headline">33p in every £1</div>
+            <div class="govt-cut-subhead">goes straight to the Treasury. Then in April 2025, <span>they hiked taxes again</span>.</div>
+
+            <div class="govt-hit-grid">
+                <div class="govt-hit">
+                    <div class="govt-hit-label">Business rates relief</div>
+                    <div class="govt-hit-value">75% → 40%</div>
+                    <div class="govt-hit-desc">Slashed overnight. £500m cost to hospitality.</div>
+                </div>
+                <div class="govt-hit">
+                    <div class="govt-hit-label">Employer NI</div>
+                    <div class="govt-hit-value">13.8% → 15%</div>
+                    <div class="govt-hit-desc">Threshold dropped from £9,100 to £5,000.</div>
+                </div>
+                <div class="govt-hit">
+                    <div class="govt-hit-label">Total April hit</div>
+                    <div class="govt-hit-value">£3.4bn</div>
+                    <div class="govt-hit-desc">Combined tax hike facing hospitality sector.</div>
+                </div>
+                <div class="govt-hit">
+                    <div class="govt-hit-label">Operating at a loss</div>
+                    <div class="govt-hit-value">1 in 3</div>
+                    <div class="govt-hit-desc">Pubs now unprofitable. Only 1 in 4 hospitality businesses are in the black.</div>
+                </div>
+                <div class="govt-hit govt-hit-full">
+                    <div class="govt-hit-label">Jobs lost since October 2024 budget</div>
+                    <div class="govt-hit-value">89,000</div>
+                    <div class="govt-hit-desc">More than half of all UK job losses in that period came from hospitality.</div>
+                </div>
+            </div>
+
+            <div class="govt-vat-compare">
+                <div class="govt-vat-item">
+                    <div class="govt-vat-label">Pub food VAT</div>
+                    <div class="govt-vat-value" style="color: var(--red);">20%</div>
+                </div>
+                <div class="govt-vat-divider"></div>
+                <div class="govt-vat-item">
+                    <div class="govt-vat-label">Supermarket food VAT</div>
+                    <div class="govt-vat-value" style="color: var(--green);">0%</div>
+                </div>
+            </div>
+
+            <div class="govt-cut-callout">
+                <p>The government takes <span>£1.61</span> from every pint. The publican who poured it keeps <span>12p</span>. Then they wonder why pubs are closing.</p>
+            </div>
+            <div style="font-size: 10px; color: var(--text-tertiary); margin-top: 12px; font-family: var(--font-mono); letter-spacing: 0.3px;">Source: BBPA · UKHospitality · ONS · House of Commons Library · HMRC duty rates</div>
+        </div>
+    </div>
+
     <!-- THE DECLINE — PUB CLOSURE CRISIS -->
     <div class="section-header fade-up">
         <div class="section-title">The Decline</div>
@@ -2749,7 +2953,7 @@
             </div>
 
             <div class="narrative-closures-quote">
-                The pubs closing are overwhelmingly small, independently owned locals. The chains are growing.
+                The pubs closing are overwhelmingly small, independently owned locals. The chains are growing. The government is watching.
             </div>
             <div style="font-size: 10px; color: var(--text-tertiary); margin-top: 16px; font-family: var(--font-mono); letter-spacing: 0.3px;">Source: BBPA · ONS · CGA / AlixPartners Hospitality Market Monitor · CAMRA 2025</div>
         </div>
@@ -2791,6 +2995,10 @@
                     <div class="community-context-icon">💷</div>
                     <div class="community-context-text">The pub industry supports 1 million jobs and contributes £34 billion to the UK economy. 51% of the workforce is under 25.</div>
                 </div>
+                <div class="community-context-item">
+                    <div class="community-context-icon">🏛️</div>
+                    <div class="community-context-text">The government collected £837m in tax from Wetherspoons alone last year — over £1m per pub. Then cut their rates relief in half.</div>
+                </div>
             </div>
 
             <div class="community-quote">
@@ -2808,28 +3016,37 @@
 
     <div class="news stagger">
         <div class="news-card fade-up">
+            <div class="news-eyebrow" style="color: var(--red);">Government</div>
+            <div class="news-title">April 2025: NI hiked, rates relief slashed, minimum wage up 6.7%. Total cost to pubs: £3.4 billion. One in three now operating at a loss.</div>
+            <div class="news-meta">
+                <div class="news-source">UKHospitality / House of Commons Library</div>
+                <div class="news-time">2025</div>
+            </div>
+        </div>
+
+        <div class="news-card fade-up">
+            <div class="news-eyebrow" style="color: var(--red);">VAT inequality</div>
+            <div class="news-title">Pubs pay 20% VAT on food. Supermarkets pay 0%. The government has known about this for years. Nothing has changed.</div>
+            <div class="news-meta">
+                <div class="news-source">BBPA / Tim Martin Tax Equality Campaign</div>
+                <div class="news-time">2025</div>
+            </div>
+        </div>
+
+        <div class="news-card fade-up">
+            <div class="news-eyebrow" style="color: var(--red);">Jobs</div>
+            <div class="news-title">89,000 hospitality jobs lost since the October 2024 budget. More than half of all UK job losses in that period. 5,600 more projected from 2025 closures.</div>
+            <div class="news-meta">
+                <div class="news-source">UKHospitality / BBPA</div>
+                <div class="news-time">2025</div>
+            </div>
+        </div>
+
+        <div class="news-card fade-up">
             <div class="news-eyebrow">Crisis</div>
-            <div class="news-title">Independent pubs down 16.6% since 2020. Managed chains up 4.2%. The squeeze is structural, not cyclical.</div>
+            <div class="news-title">Independent pubs down 16.6% since 2020. Managed chains up 4.2%. The squeeze is structural, not cyclical — and the government just made it worse.</div>
             <div class="news-meta">
                 <div class="news-source">ONS / CGA AlixPartners</div>
-                <div class="news-time">2025</div>
-            </div>
-        </div>
-
-        <div class="news-card fade-up">
-            <div class="news-eyebrow">Economics</div>
-            <div class="news-title">Break-even for an independent: £4.00+. Spoons avg: £3.22. The gap that no local can close.</div>
-            <div class="news-meta">
-                <div class="news-source">BBPA / BII Benchmarking</div>
-                <div class="news-time">2025</div>
-            </div>
-        </div>
-
-        <div class="news-card fade-up">
-            <div class="news-eyebrow">Data</div>
-            <div class="news-title">Business rates relief cut from 75% to 40% in April 2025. Estimated £215m additional cost to pubs.</div>
-            <div class="news-meta">
-                <div class="news-source">BBPA / UKHospitality</div>
                 <div class="news-time">2025</div>
             </div>
         </div>
@@ -2920,7 +3137,7 @@
         </div>
         <div class="tab-item" data-scroll="#gapHeader">
             <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
-            <span>The Gap</span>
+            <span>Policy</span>
         </div>
     </nav>
 
