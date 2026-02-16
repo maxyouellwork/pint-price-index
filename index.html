@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-    <title>Pint Price Index — Live UK Beer Prices</title>
-    <meta name="description" content="Real-time pint prices from 700+ Wetherspoons pubs. Find the cheapest beer near you, compare regional prices, and explore the UK's most comprehensive pint price database.">
-    <meta property="og:title" content="Pint Price Index — Live UK Beer Prices">
-    <meta property="og:description" content="Real-time pint prices from 700+ Wetherspoons. The Bloomberg Terminal for beer.">
+    <title>Pint of No Return — The Price Gap Killing Your Local</title>
+    <meta name="description" content="15,800 pubs lost since 2000. Spoons sells pints at £3.22 while your local needs £4.83 to survive. Explore the data behind Britain's pub crisis.">
+    <meta property="og:title" content="Pint of No Return — The Price Gap Killing Your Local">
+    <meta property="og:description" content="15,800 pubs lost. £3.22 vs £4.83. The gap your local can't close. Explore live prices from 778 Wetherspoons pubs.">
     <meta property="og:type" content="website">
     <meta name="theme-color" content="#0d1117">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1249,6 +1249,273 @@
         }
 
         /* ==========================================
+           THE GAP — THREE PRICE CARDS
+        ========================================== */
+        .gap-section {
+            padding: 0 20px 8px;
+        }
+
+        .gap-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .gap-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 16px 12px;
+            text-align: center;
+        }
+
+        .gap-card-spoons {
+            border-color: var(--amber);
+            box-shadow: 0 0 20px rgba(240, 160, 48, 0.08);
+        }
+
+        .gap-card-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-tertiary);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .gap-card-price {
+            font-family: var(--font-mono);
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .gap-card-sub {
+            font-size: 10px;
+            color: var(--text-tertiary);
+            margin-bottom: 12px;
+        }
+
+        .gap-card-bar {
+            height: 4px;
+            background: var(--bg-elevated);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .gap-bar-fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 1s ease;
+        }
+
+        .gap-callout {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--red);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            margin-top: 12px;
+        }
+
+        .gap-callout p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .gap-callout span {
+            color: var(--text-primary);
+            font-weight: 700;
+            font-family: var(--font-mono);
+        }
+
+        /* ==========================================
+           SPOONS ADVANTAGE
+        ========================================== */
+        .spoons-advantage {
+            padding: 0 20px 8px;
+        }
+
+        .spoons-advantage-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+        }
+
+        .advantage-row {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .advantage-row:last-of-type {
+            border-bottom: none;
+        }
+
+        .advantage-icon {
+            min-width: 44px;
+            height: 44px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-mono);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .advantage-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 3px;
+        }
+
+        .advantage-desc {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            line-height: 1.4;
+        }
+
+        .advantage-callout {
+            background: var(--bg-elevated);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        .advantage-callout p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .advantage-callout span {
+            color: var(--text-primary);
+            font-weight: 700;
+            font-family: var(--font-mono);
+        }
+
+        /* ==========================================
+           DECLINE SPLIT (indie vs chain)
+        ========================================== */
+        .decline-split {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 20px 0 16px;
+            padding: 16px;
+            background: rgba(0,0,0,0.25);
+            border-radius: var(--radius-md);
+        }
+
+        .decline-split-item {
+            flex: 1;
+            text-align: center;
+        }
+
+        .decline-split-value {
+            font-family: var(--font-mono);
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .decline-split-label {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            line-height: 1.3;
+        }
+
+        .decline-split-divider {
+            width: 1px;
+            height: 48px;
+            background: var(--border);
+        }
+
+        /* ==========================================
+           COMMUNITY IMPACT
+        ========================================== */
+        .community-impact {
+            padding: 0 20px 8px;
+        }
+
+        .community-impact-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+        }
+
+        .community-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .community-stat {
+            text-align: center;
+            padding: 12px 8px;
+            background: var(--bg-elevated);
+            border-radius: var(--radius-sm);
+        }
+
+        .community-stat-value {
+            font-family: var(--font-mono);
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .community-stat-label {
+            font-size: 10px;
+            color: var(--text-tertiary);
+            line-height: 1.4;
+        }
+
+        .community-context {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .community-context-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .community-context-icon {
+            font-size: 18px;
+            min-width: 28px;
+            text-align: center;
+            padding-top: 2px;
+        }
+
+        .community-context-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .community-quote {
+            font-style: italic;
+            font-size: 13px;
+            color: var(--text-tertiary);
+            line-height: 1.6;
+            padding: 16px;
+            border-left: 2px solid var(--amber);
+            background: var(--bg-elevated);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        }
+
+        /* ==========================================
            ANIMATIONS
         ========================================== */
         .fade-up {
@@ -1867,9 +2134,9 @@
 
     <!-- LOADER -->
     <div class="loader" id="loader">
-        <div class="loader-logo">PPI<span>.market</span></div>
+        <div class="loader-logo">PONR<span>.pub</span></div>
         <div class="loader-bar"><div class="loader-bar-fill"></div></div>
-        <div class="loader-text">FETCHING LIVE PRICES...</div>
+        <div class="loader-text">LOADING 778 PUB PRICES...</div>
     </div>
 
     <!-- CONCEPT BADGE -->
@@ -1888,7 +2155,7 @@
     <header class="app-header">
         <div class="app-logo">
             <div class="app-logo-icon"><img src="logo-web.jpg" alt="PPI"></div>
-            <div class="app-logo-text">PintPrice<span>Index</span></div>
+            <div class="app-logo-text">Pint<span>ofNoReturn</span></div>
         </div>
         <div class="header-actions">
             <div class="header-btn">
@@ -1910,26 +2177,26 @@
 
     <!-- PORTFOLIO -->
     <section class="portfolio fade-up">
-        <div class="portfolio-label">Avg. Pint Price — Sheffield</div>
+        <div class="portfolio-label">Avg. Spoons Pint — 778 pubs tracked</div>
         <div class="portfolio-value">
-            <span class="currency">£</span><span class="count-up" data-target="4.13">0.00</span>
+            <span class="currency">£</span><span class="count-up" data-target="3.22">0.00</span>
         </div>
-        <div class="portfolio-change positive">
-            ▲ £0.50 (13.8%) <span class="label">since Feb 2023 · CAMRA survey</span>
+        <div class="portfolio-change">
+            <span class="positive">▼ £1.61 cheaper than national avg</span> <span class="label">· ONS national: £4.83</span>
         </div>
 
         <div class="portfolio-stats stagger">
             <div class="portfolio-stat fade-up">
-                <div class="portfolio-stat-label">Cheapest</div>
-                <div class="portfolio-stat-value green">£2.40</div>
+                <div class="portfolio-stat-label">Spoons Avg</div>
+                <div class="portfolio-stat-value green">£3.22</div>
             </div>
             <div class="portfolio-stat fade-up">
-                <div class="portfolio-stat-label">National Avg</div>
-                <div class="portfolio-stat-value amber">£4.83</div>
+                <div class="portfolio-stat-label">Your Local</div>
+                <div class="portfolio-stat-value red">£4.83</div>
             </div>
             <div class="portfolio-stat fade-up">
-                <div class="portfolio-stat-label">London Avg</div>
-                <div class="portfolio-stat-value red">£6.10</div>
+                <div class="portfolio-stat-label">The Gap</div>
+                <div class="portfolio-stat-value amber">£1.61</div>
             </div>
         </div>
     </section>
@@ -2006,6 +2273,39 @@
             <div class="cheapest-hero-pub" id="cheapestHeroPub">—</div>
             <div class="cheapest-hero-sub" id="cheapestHeroSub">—</div>
         </div>
+    </div>
+
+    <!-- THE GAP — WHY YOUR LOCAL CAN'T COMPETE -->
+    <div class="section-header fade-up" id="gapHeader">
+        <div class="section-title">The Gap</div>
+        <div class="section-link" style="color: var(--red);">Why your local can't compete</div>
+    </div>
+
+    <div class="gap-section fade-up" id="gapSection">
+        <div class="gap-cards">
+            <div class="gap-card">
+                <div class="gap-card-label">Supermarket</div>
+                <div class="gap-card-price" style="color: var(--green);">£1.20</div>
+                <div class="gap-card-sub">500ml can at home</div>
+                <div class="gap-card-bar"><div class="gap-bar-fill" style="width: 25%; background: var(--green);"></div></div>
+            </div>
+            <div class="gap-card gap-card-spoons">
+                <div class="gap-card-label">Spoons Avg</div>
+                <div class="gap-card-price" id="gapSpoonsPrice" style="color: var(--amber);">£3.22</div>
+                <div class="gap-card-sub">778 pubs nationwide</div>
+                <div class="gap-card-bar"><div class="gap-bar-fill" id="gapSpoonsBar" style="width: 67%; background: var(--amber);"></div></div>
+            </div>
+            <div class="gap-card">
+                <div class="gap-card-label">Your Local</div>
+                <div class="gap-card-price" style="color: var(--red);">£4.83</div>
+                <div class="gap-card-sub">ONS national average</div>
+                <div class="gap-card-bar"><div class="gap-bar-fill" style="width: 100%; background: var(--red);"></div></div>
+            </div>
+        </div>
+        <div class="gap-callout">
+            <p>An independent pub needs to charge <span>£4.00–£4.50</span> just to break even. Spoons can do it for £2.85 because of scale. That gap is why <span>15,800 pubs</span> have closed since 2000.</p>
+        </div>
+        <div style="font-size: 10px; color: var(--text-tertiary); margin-top: 12px; font-family: var(--font-mono); letter-spacing: 0.3px;">Source: BBPA / ONS / Wetherspoons JDW Apps API</div>
     </div>
 
     <!-- FIND NEAREST CHEAP PINT -->
@@ -2314,16 +2614,16 @@
         <div style="font-size: 10px; color: var(--text-tertiary); margin-top: 10px; font-family: var(--font-mono); letter-spacing: 0.3px;">Source: Morning Advertiser Pint Price Survey 2025 · CAMRA Sheffield Beer Capital Survey</div>
     </div>
 
-    <!-- THE REAL COST — PINT PRICE BREAKDOWN -->
-    <div class="section-header fade-up">
-        <div class="section-title">The Real Cost</div>
-        <div class="section-link">Where your money goes</div>
+    <!-- THE REAL COST — WHY YOUR LOCAL NEEDS £4.83 -->
+    <div class="section-header fade-up" id="storySection">
+        <div class="section-title">Why Your Local Needs £4.83</div>
+        <div class="section-link">Where every penny goes</div>
     </div>
 
     <div class="narrative-cost fade-up">
         <div class="narrative-cost-card">
             <div class="narrative-cost-intro">
-                The average UK pint now costs <strong>£4.83</strong>. A third of that goes straight to the government. Here's where every penny ends up.
+                This is where every penny of an average pint at your local goes. A third goes straight to the government. The pub keeps <strong>12p</strong>.
             </div>
 
             <div class="narrative-bar-track" id="narrativeCostBar">
@@ -2358,119 +2658,145 @@
             </div>
 
             <div class="narrative-cost-callout">
-                <p>The pub keeps <span>12p</span> from every pint. Down from 84p in 2009.</p>
+                <p>The average publican earns <span>£15,000/year</span> — below minimum wage — working 60+ hour weeks. Down from 84p profit per pint in 2009.</p>
             </div>
-            <div style="font-size: 10px; color: var(--text-tertiary); margin-top: 12px; font-family: var(--font-mono); letter-spacing: 0.3px;">Source: BBPA / Oxford Economics 2024</div>
         </div>
     </div>
 
-    <!-- PUBS WE'RE LOSING — CLOSURE COUNTER -->
+    <!-- WHY SPOONS CAN UNDERCUT -->
     <div class="section-header fade-up">
-        <div class="section-title">Pubs We're Losing</div>
-        <div class="section-link" style="color: var(--red);">The crisis</div>
+        <div class="section-title">Why Spoons Can Do It for Less</div>
+        <div class="section-link">The advantage</div>
+    </div>
+
+    <div class="spoons-advantage fade-up">
+        <div class="spoons-advantage-card">
+            <div class="advantage-row">
+                <div class="advantage-icon" style="background: var(--green-dim); color: var(--green);">-50p</div>
+                <div class="advantage-text">
+                    <div class="advantage-title">Bulk buying power</div>
+                    <div class="advantage-desc">800+ pubs. Direct brewery deals. 15-25% below what your local pays per barrel.</div>
+                </div>
+            </div>
+            <div class="advantage-row">
+                <div class="advantage-icon" style="background: var(--green-dim); color: var(--green);">-40p</div>
+                <div class="advantage-text">
+                    <div class="advantage-title">Fewer staff per pint</div>
+                    <div class="advantage-desc">App-based ordering. No table service. Standardised menus — no chefs needed.</div>
+                </div>
+            </div>
+            <div class="advantage-row">
+                <div class="advantage-icon" style="background: var(--green-dim); color: var(--green);">-30p</div>
+                <div class="advantage-text">
+                    <div class="advantage-title">Lower rent per pint</div>
+                    <div class="advantage-desc">Huge venues in converted banks and cinemas. Volume spreads costs thin.</div>
+                </div>
+            </div>
+            <div class="advantage-row">
+                <div class="advantage-icon" style="background: var(--teal-dim); color: var(--teal);">£0</div>
+                <div class="advantage-text">
+                    <div class="advantage-title">No music, no sport</div>
+                    <div class="advantage-desc">No PRS licensing fees. No Sky Sports subscription. Keeps overheads minimal.</div>
+                </div>
+            </div>
+            <div class="advantage-callout">
+                <p>An independent needs <span>£4.00+</span> to survive. Spoons can profit at <span>£2.85</span>. That's not a level playing field — it's a structural advantage that no local can match.</p>
+            </div>
+            <div style="font-size: 10px; color: var(--text-tertiary); margin-top: 12px; font-family: var(--font-mono); letter-spacing: 0.3px;">Source: BBPA / BII Benchmarking / Wetherspoons Annual Report 2024</div>
+        </div>
+    </div>
+
+    <!-- THE DECLINE — PUB CLOSURE CRISIS -->
+    <div class="section-header fade-up">
+        <div class="section-title">The Decline</div>
+        <div class="section-link" style="color: var(--red);">Since 2000</div>
     </div>
 
     <div class="narrative-closures fade-up">
         <div class="narrative-closures-card">
             <div class="narrative-closures-bg"></div>
             <div class="narrative-closures-counter">
-                <span class="count-up" data-target="6900" data-format="integer" id="closureCounter">0</span><span class="narrative-plus">+</span>
+                <span class="count-up" data-target="15800" data-format="integer" id="closureCounter">0</span>
             </div>
-            <div class="narrative-closures-subtitle">net pub closures in the last decade</div>
-            <div class="narrative-closures-rate">6 pubs closing every single week</div>
+            <div class="narrative-closures-subtitle">pubs lost since 2000</div>
+            <div class="narrative-closures-rate">One pub closing every single day</div>
 
             <div class="narrative-closures-stats">
+                <div class="narrative-closures-stat">
+                    <div class="narrative-closures-stat-value">60,800</div>
+                    <div class="narrative-closures-stat-label">Pubs in 2000</div>
+                </div>
                 <div class="narrative-closures-stat">
                     <div class="narrative-closures-stat-value">45,000</div>
                     <div class="narrative-closures-stat-label">Pubs remain</div>
                 </div>
                 <div class="narrative-closures-stat">
-                    <div class="narrative-closures-stat-value">51,900</div>
-                    <div class="narrative-closures-stat-label">In 2014</div>
+                    <div class="narrative-closures-stat-value" style="color: var(--red);">-26%</div>
+                    <div class="narrative-closures-stat-label">In 25 years</div>
                 </div>
-                <div class="narrative-closures-stat">
-                    <div class="narrative-closures-stat-value" style="color: var(--red);">-13%</div>
-                    <div class="narrative-closures-stat-label">In 10 years</div>
+            </div>
+
+            <div class="decline-split">
+                <div class="decline-split-item">
+                    <div class="decline-split-value" style="color: var(--red);">-16.6%</div>
+                    <div class="decline-split-label">Independent pubs since 2020</div>
+                </div>
+                <div class="decline-split-divider"></div>
+                <div class="decline-split-item">
+                    <div class="decline-split-value" style="color: var(--green);">+4.2%</div>
+                    <div class="decline-split-label">Managed chains since 2020</div>
                 </div>
             </div>
 
             <div class="narrative-closures-quote">
-                "Every pub that closes is a community that loses its living room."
+                The pubs closing are overwhelmingly small, independently owned locals. The chains are growing.
             </div>
-            <div style="font-size: 10px; color: var(--text-tertiary); margin-top: 16px; font-family: var(--font-mono); letter-spacing: 0.3px;">Source: BBPA pub numbers 2014–2024 · CAMRA closures report Feb 2025</div>
+            <div style="font-size: 10px; color: var(--text-tertiary); margin-top: 16px; font-family: var(--font-mono); letter-spacing: 0.3px;">Source: BBPA · ONS · CGA / AlixPartners Hospitality Market Monitor · CAMRA 2025</div>
         </div>
     </div>
 
-    <!-- YOUR PINT VS EVERYTHING — INFLATION COMPARISON -->
+    <!-- WHAT WE'RE LOSING — COMMUNITY IMPACT -->
     <div class="section-header fade-up">
-        <div class="section-title">Your Pint vs. Everything</div>
-        <div class="section-link">Since 2010</div>
+        <div class="section-title">What We're Losing</div>
+        <div class="section-link">It's not just beer</div>
     </div>
 
-    <div class="narrative-inflation fade-up">
-        <div class="narrative-inflation-card">
-            <div class="narrative-inflation-subtitle">Growth since 2010 · ONS, GOV.UK, HMRC verified data</div>
-
-            <div class="narrative-inflation-rows">
-                <div class="narrative-inflation-row">
-                    <div class="narrative-inflation-row-header">
-                        <span class="narrative-inflation-label">Minimum wage</span>
-                        <span class="narrative-inflation-value" style="color: var(--amber);">+106%</span>
-                    </div>
-                    <div class="narrative-inflation-bar-track">
-                        <div class="narrative-inflation-bar-fill narrative-bar-wage" style="width: 100%;"></div>
-                    </div>
+    <div class="community-impact fade-up">
+        <div class="community-impact-card">
+            <div class="community-stats">
+                <div class="community-stat">
+                    <div class="community-stat-value" style="color: var(--red);">86%</div>
+                    <div class="community-stat-label">say their community suffers when a pub closes</div>
                 </div>
-
-                <div class="narrative-inflation-row">
-                    <div class="narrative-inflation-row-header">
-                        <span class="narrative-inflation-label">House prices</span>
-                        <span class="narrative-inflation-value narrative-neutral">+74%</span>
-                    </div>
-                    <div class="narrative-inflation-bar-track">
-                        <div class="narrative-inflation-bar-fill narrative-bar-house" style="width: 69.8%;"></div>
-                    </div>
+                <div class="community-stat">
+                    <div class="community-stat-value" style="color: var(--amber);">60%</div>
+                    <div class="community-stat-label">concerned about increased loneliness from pub closures</div>
                 </div>
-
-                <div class="narrative-inflation-row">
-                    <div class="narrative-inflation-row-header">
-                        <span class="narrative-inflation-label">Avg pint price</span>
-                        <span class="narrative-inflation-value narrative-highlight">+73%</span>
-                    </div>
-                    <div class="narrative-inflation-bar-track">
-                        <div class="narrative-inflation-bar-fill narrative-bar-pint" style="width: 68.9%;"></div>
-                    </div>
-                </div>
-
-                <div class="narrative-inflation-row">
-                    <div class="narrative-inflation-row-header">
-                        <span class="narrative-inflation-label">General inflation (CPI)</span>
-                        <span class="narrative-inflation-value narrative-neutral">+45%</span>
-                    </div>
-                    <div class="narrative-inflation-bar-track">
-                        <div class="narrative-inflation-bar-fill narrative-bar-cpi" style="width: 42.5%;"></div>
-                    </div>
+                <div class="community-stat">
+                    <div class="community-stat-value" style="color: var(--blue);">1 in 5</div>
+                    <div class="community-stat-label">UK pubs are technically insolvent — negative net assets</div>
                 </div>
             </div>
 
-            <div class="narrative-inflation-divider"></div>
-
-            <div class="narrative-inflation-insight">
-                <div class="narrative-inflation-insight-block">
-                    <div class="narrative-inflation-insight-year">2010</div>
-                    <div class="narrative-inflation-insight-pints">2.1 <small>pints/hr</small></div>
+            <div class="community-context">
+                <div class="community-context-item">
+                    <div class="community-context-icon">🏠</div>
+                    <div class="community-context-text">Closed pubs become flats, Tesco Express, or boarded-up shells. In many villages, the pub was the last remaining community space.</div>
                 </div>
-                <div class="narrative-inflation-insight-arrow">→</div>
-                <div class="narrative-inflation-insight-block">
-                    <div class="narrative-inflation-insight-year">2025</div>
-                    <div class="narrative-inflation-insight-pints" style="color: var(--green);">2.5 <small>pints/hr</small></div>
+                <div class="community-context-item">
+                    <div class="community-context-icon">🇫🇷</div>
+                    <div class="community-context-text">It's not just us. France lost 460,000 bistros since 1900. They're now seeking UNESCO heritage status to save what's left.</div>
+                </div>
+                <div class="community-context-item">
+                    <div class="community-context-icon">💷</div>
+                    <div class="community-context-text">The pub industry supports 1 million jobs and contributes £34 billion to the UK economy. 51% of the workforce is under 25.</div>
                 </div>
             </div>
 
-            <div class="narrative-inflation-footnote">
-                On minimum wage you can buy <strong>more pints per hour</strong> than in 2010. But the pub that serves them makes just <span class="narrative-emphasis">12p</span> on each one.
+            <div class="community-quote">
+                "I've been consoled in there, I've consoled friends in there. We've chopped up family issues, work issues. We've drunk for the sake of drinking in there."
             </div>
-            <div style="font-size: 10px; color: var(--text-tertiary); margin-top: 12px; font-family: var(--font-mono); letter-spacing: 0.3px;">Source: ONS RPI (CZMS) · GOV.UK NLW rates · ONS House Price Index</div>
+            <div style="font-size: 10px; color: var(--text-tertiary); margin-top: 12px; font-family: var(--font-mono); letter-spacing: 0.3px;">Source: Loughborough Uni / Campaign to End Loneliness "Open Arms" report · BBPA · France UNESCO bid 2024</div>
         </div>
     </div>
 
@@ -2482,29 +2808,29 @@
 
     <div class="news stagger">
         <div class="news-card fade-up">
-            <div class="news-eyebrow">Data</div>
-            <div class="news-title">Pub profit collapsed from 84p to 12p per pint since 2009 — BBPA calls for emergency duty cut</div>
+            <div class="news-eyebrow">Crisis</div>
+            <div class="news-title">Independent pubs down 16.6% since 2020. Managed chains up 4.2%. The squeeze is structural, not cyclical.</div>
             <div class="news-meta">
-                <div class="news-source">BBPA / Oxford Economics</div>
-                <div class="news-time">2024</div>
-            </div>
-        </div>
-
-        <div class="news-card fade-up">
-            <div class="news-eyebrow">Analysis</div>
-            <div class="news-title">A third goes to the taxman: why UK pubs pay more tax per pint than any other European country</div>
-            <div class="news-meta">
-                <div class="news-source">PPI Research · Brauwelt</div>
+                <div class="news-source">ONS / CGA AlixPartners</div>
                 <div class="news-time">2025</div>
             </div>
         </div>
 
         <div class="news-card fade-up">
-            <div class="news-eyebrow">Regional</div>
-            <div class="news-title">Sheffield bucks the trend: city average £4.13 is 70p below national — but craft premium is growing</div>
+            <div class="news-eyebrow">Economics</div>
+            <div class="news-title">Break-even for an independent: £4.00+. Spoons avg: £3.22. The gap that no local can close.</div>
             <div class="news-meta">
-                <div class="news-source">CAMRA Beer Capital Survey</div>
-                <div class="news-time">May 2025</div>
+                <div class="news-source">BBPA / BII Benchmarking</div>
+                <div class="news-time">2025</div>
+            </div>
+        </div>
+
+        <div class="news-card fade-up">
+            <div class="news-eyebrow">Data</div>
+            <div class="news-title">Business rates relief cut from 75% to 40% in April 2025. Estimated £215m additional cost to pubs.</div>
+            <div class="news-meta">
+                <div class="news-source">BBPA / UKHospitality</div>
+                <div class="news-time">2025</div>
             </div>
         </div>
     </div>
@@ -2584,17 +2910,17 @@
             <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
             <span>Markets</span>
         </div>
-        <div class="tab-item" data-scroll=".watchlist">
-            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            <span>Watchlist</span>
-        </div>
-        <div class="tab-item" data-scroll=".alerts">
-            <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-            <span>Alerts</span>
+        <div class="tab-item" data-scroll="#storySection">
+            <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            <span>Story</span>
         </div>
         <div class="tab-item" data-scroll="#explorerSection">
-            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
             <span>Explorer</span>
+        </div>
+        <div class="tab-item" data-scroll="#gapHeader">
+            <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+            <span>The Gap</span>
         </div>
     </nav>
 
@@ -2936,33 +3262,38 @@
             const meta = SPOONS.meta;
             // Update the portfolio label
             const label = document.querySelector('.portfolio-label');
-            if (label) label.textContent = `Wetherspoons Pint Index — ${meta.totalPubs} pubs`;
+            if (label) label.textContent = `Avg. Spoons Pint — ${meta.totalPubs} pubs tracked`;
 
             // Update the main price
             const countEl = document.querySelector('.portfolio-value .count-up');
             if (countEl) countEl.dataset.target = meta.avgPint;
 
-            // Get ONS national avg from chart data
+            // Get ONS national avg
             const onsAvg = APP_DATA?.national?.current;
-            const discount = onsAvg ? ((1 - meta.avgPint / onsAvg) * 100).toFixed(0) : null;
+            const gap = onsAvg ? (onsAvg - meta.avgPint).toFixed(2) : null;
 
-            // Update stats: Cheapest | ONS National | Saving
+            // Update stats: Spoons Avg | Your Local | The Gap
             const stats = document.querySelectorAll('.portfolio-stat-value');
             const statLabels = document.querySelectorAll('.portfolio-stat-label');
-            if (stats[0]) { stats[0].textContent = `£${meta.cheapestPint.toFixed(2)}`; stats[0].className = 'portfolio-stat-value green'; }
-            if (statLabels[0]) statLabels[0].textContent = 'Cheapest';
+            if (stats[0]) { stats[0].textContent = `£${meta.avgPint.toFixed(2)}`; stats[0].className = 'portfolio-stat-value green'; }
+            if (statLabels[0]) statLabels[0].textContent = 'Spoons Avg';
             if (stats[1] && onsAvg) { stats[1].textContent = `£${onsAvg.toFixed(2)}`; stats[1].className = 'portfolio-stat-value red'; }
-            if (statLabels[1] && onsAvg) statLabels[1].textContent = 'ONS National';
-            if (stats[2] && discount) { stats[2].textContent = `${discount}%`; stats[2].className = 'portfolio-stat-value green'; }
-            if (statLabels[2] && discount) statLabels[2].textContent = 'Spoons Saving';
+            if (statLabels[1] && onsAvg) statLabels[1].textContent = 'Your Local';
+            if (stats[2] && gap) { stats[2].textContent = `£${gap}`; stats[2].className = 'portfolio-stat-value amber'; }
+            if (statLabels[2] && gap) statLabels[2].textContent = 'The Gap';
 
-            // Update change line
+            // Update change line — frame around the gap
             const changeEl = document.querySelector('.portfolio-change');
             if (changeEl) {
-                const saving = onsAvg ? `£${(onsAvg - meta.avgPint).toFixed(2)} cheaper than UK avg` : '';
-                changeEl.innerHTML = `<span class="positive">▼ ${saving}</span> <span class="label">· ${meta.totalPubs} pubs · ${meta.totalBeers.toLocaleString()} beers tracked</span>`;
+                changeEl.innerHTML = `<span class="positive">▼ £${gap} cheaper than national avg</span> <span class="label">· ONS national: £${onsAvg?.toFixed(2) || '4.83'}</span>`;
                 changeEl.className = 'portfolio-change';
             }
+
+            // Update Gap section if it exists
+            const gapPrice = document.getElementById('gapSpoonsPrice');
+            if (gapPrice) gapPrice.textContent = `£${meta.avgPint.toFixed(2)}`;
+            const gapBar = document.getElementById('gapSpoonsBar');
+            if (gapBar && onsAvg) gapBar.style.width = `${(meta.avgPint / onsAvg * 100).toFixed(0)}%`;
         }
 
         // ==========================================
