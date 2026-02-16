@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="beer" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f0c040"/>
+      <stop offset="100%" stop-color="#c87a10"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3a3a3a"/>
+      <stop offset="100%" stop-color="#222"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Pint glass body -->
+  <path d="M32 22 L28 98 Q28 106 36 106 L84 106 Q92 106 92 98 L88 22 Z" fill="url(#glass)" stroke="#555" stroke-width="2"/>
+
+  <!-- Beer fill -->
+  <path d="M35 38 L31 96 Q31 102 37 102 L83 102 Q89 102 89 96 L85 38 Z" fill="url(#beer)"/>
+
+  <!-- Foam -->
+  <ellipse cx="60" cy="38" rx="26" ry="6" fill="#f5e6c8"/>
+  <ellipse cx="48" cy="36" rx="8" ry="5" fill="white" opacity="0.5"/>
+  <ellipse cx="68" cy="35" rx="10" ry="5" fill="white" opacity="0.4"/>
+
+  <!-- Handle -->
+  <path d="M88 36 Q108 36 108 56 Q108 76 88 76" fill="none" stroke="#555" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- Downward red trend line -->
+  <path d="M22 32 L50 48 L65 42 L98 88" fill="none" stroke="#e74c3c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Arrow head on trend line -->
+  <polygon points="98,88 88,80 94,82" fill="#e74c3c"/>
+
+  <!-- Crack on glass -->
+  <path d="M55 58 L52 68 L58 72 L54 85 L60 90" fill="none" stroke="#0d1117" stroke-width="1.5" opacity="0.6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
