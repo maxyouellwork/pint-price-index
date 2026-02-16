@@ -1438,6 +1438,171 @@
         }
 
         /* ==========================================
+           STATEMENT ZONE — editorial break from terminal
+        ========================================== */
+        .statement-zone {
+            position: relative;
+            padding-top: 8px;
+            margin-top: 12px;
+        }
+
+        .statement-zone::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 20px;
+            right: 20px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--red), var(--amber), var(--red), transparent);
+        }
+
+        .statement-divider {
+            padding: 40px 20px 12px;
+            text-align: center;
+        }
+
+        .statement-divider-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--red);
+            font-weight: 600;
+            font-family: var(--font-mono);
+            margin-bottom: 16px;
+        }
+
+        .statement-divider-headline {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.2;
+            max-width: 500px;
+            margin: 0 auto 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .statement-divider-sub {
+            font-size: 14px;
+            color: var(--text-tertiary);
+            max-width: 400px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* Override section headers inside statement zone */
+        .statement-zone .section-header {
+            padding: 36px 20px 16px;
+        }
+
+        .statement-zone .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .statement-zone .section-link {
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Bigger narrative intros */
+        .statement-zone .narrative-cost-intro {
+            font-size: 16px;
+            line-height: 1.7;
+            color: var(--text-primary);
+        }
+
+        /* Bigger callouts */
+        .statement-zone .narrative-cost-callout p,
+        .statement-zone .advantage-callout p {
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        .statement-zone .narrative-cost-callout span,
+        .statement-zone .advantage-callout span {
+            font-size: 16px;
+        }
+
+        /* Bigger cost bar labels */
+        .statement-zone .narrative-bar-label-value {
+            font-size: 13px;
+        }
+
+        /* Bigger decline counter */
+        .statement-zone .narrative-closures-counter {
+            font-size: 72px;
+        }
+
+        .statement-zone .narrative-closures-subtitle {
+            font-size: 16px;
+        }
+
+        .statement-zone .narrative-closures-rate {
+            font-size: 15px;
+        }
+
+        .statement-zone .narrative-closures-quote {
+            font-size: 16px;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        /* Bigger community stats */
+        .statement-zone .community-stat-value {
+            font-size: 26px;
+        }
+
+        .statement-zone .community-context-text {
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .statement-zone .community-quote {
+            font-size: 16px;
+            line-height: 1.7;
+            padding: 20px;
+        }
+
+        /* Bolder news cards */
+        .statement-zone .news-card {
+            padding: 20px;
+        }
+
+        .statement-zone .news-title {
+            font-size: 15px;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .statement-zone .news-eyebrow {
+            font-size: 10px;
+            letter-spacing: 1.5px;
+        }
+
+        /* Government section gets even more dramatic in statement zone */
+        .statement-zone .govt-cut-headline {
+            font-size: 36px;
+        }
+
+        .statement-zone .govt-cut-subhead {
+            font-size: 15px;
+        }
+
+        .statement-zone .govt-hit-value {
+            font-size: 22px;
+        }
+
+        .statement-zone .govt-vat-value {
+            font-size: 28px;
+        }
+
+        .statement-zone .govt-cut-callout p {
+            font-size: 16px;
+            line-height: 1.7;
+        }
+
+        /* ==========================================
            GOVERNMENT'S CUT
         ========================================== */
         .govt-cut {
@@ -2760,6 +2925,16 @@
         <div style="font-size: 10px; color: var(--text-tertiary); margin-top: 10px; font-family: var(--font-mono); letter-spacing: 0.3px;">Source: Morning Advertiser Pint Price Survey 2025 · CAMRA Sheffield Beer Capital Survey</div>
     </div>
 
+    <!-- ============================================
+         STATEMENT ZONE — editorial break from terminal
+         ============================================ -->
+    <div class="statement-zone">
+        <div class="statement-divider">
+            <div class="statement-divider-label">Beyond the numbers</div>
+            <div class="statement-divider-headline">Your pint is paying for a crisis the government created.</div>
+            <div class="statement-divider-sub">Every price above has a story behind it. Scroll to read it.</div>
+        </div>
+
     <!-- THE REAL COST — WHY YOUR LOCAL NEEDS £4.83 -->
     <div class="section-header fade-up" id="storySection">
         <div class="section-title">Why Your Local Needs £4.83</div>
@@ -3051,6 +3226,8 @@
             </div>
         </div>
     </div>
+
+    </div><!-- end .statement-zone -->
 
     <!-- PRICE DISTRIBUTION -->
     <div class="section-header fade-up" id="distHeader" style="display:none;">
