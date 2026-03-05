@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-02-15",
+  "lastUpdated": "2026-03-05",
   "dataSource": "ONS RPI Time Series CZMS (MM23)",
   "apiEndpoint": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/czms/mm23/data",
   "national": {
